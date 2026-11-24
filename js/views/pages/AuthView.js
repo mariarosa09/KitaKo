@@ -15,7 +15,7 @@ const AuthView = {
   },
 
   googleFlowModal({known}) {
-    return `<div class="note" style="margin-bottom:14px">Simulated Google sign-in for this prototype. Nothing is sent to Google.</div>
+    return `<div class="note" style="margin-bottom:14px">Simulated Google sign-in — nothing is sent to Google. To use real Google accounts, set GOOGLE_CLIENT_ID in js/config.js and open KitaKo over http(s).</div>
     ${known.length ? `<div class="section-title">Choose an account</div>${known.map(u => `<button class="acct-row" data-gacct="${esc(u.id)}"><span class="avatar">${esc(u.fullname.slice(0, 1).toUpperCase())}</span><span style="flex:1"><b>${esc(u.fullname)}</b><br><span class="hint">${esc(u.email)}</span></span></button>`).join('')}<div class="section-title" style="margin-top:12px">Use another account</div>` : ''}
     <form class="form" id="gForm"><label>Name<input id="gName" autocomplete="name"></label><label>Google email<input id="gEmail" type="email" placeholder="you@gmail.com" autocomplete="email"></label><p class="form-error" id="gErr"></p></form>`;
   },

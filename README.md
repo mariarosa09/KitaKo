@@ -10,6 +10,10 @@ An internet connection is needed for the libraries loaded from a CDN: Chart.js (
 
 To get a single shareable file, run `python3 tools/build.py`. It writes `dist/KitaKo.html` with the CSS, scripts and images inlined.
 
+### Google sign-in
+
+"Continue with Google" uses real Google accounts once you set `GOOGLE_CLIENT_ID` in `js/config.js` (an OAuth *Web application* client from Google Cloud Console, with your site's address listed under *Authorized JavaScript origins*). Google does not allow `file://` pages, so serve the folder, for example `python -m http.server 5500`, and open `http://localhost:5500`. Without a client ID, a simulated sign-in is used.
+
 ### First run
 
 There are no built-in accounts. Choose **Create account**, sign up as a business owner and set up your business (tick *Start with a sample menu* if you want sample data). Cashiers then sign up and join using the business username.
@@ -23,6 +27,7 @@ kitako/
 │   ├── css/style.css          All styles (navy #0B3866 + mint #95F9C3, light mode)
 │   └── img/                   logo.png, favicon.png, google.png
 ├── js/
+│   ├── config.js              GOOGLE_CLIENT_ID for real Google sign-in
 │   ├── utils.js               Shared helpers: $ / $$, escaping, money, dates, hashing
 │   ├── models/                MODEL — data and business rules, no screen code
 │   │   ├── Store.js           localStorage access, per-business data, session, ModelEvents
