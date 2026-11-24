@@ -347,12 +347,6 @@ details.more[open] summary{margin-bottom:8px}
 .steps .done i{background:var(--accent);color:var(--primary)}
 .steps b{width:18px;height:1px;background:var(--line)}
 .otp-input{font:700 28px var(--mono)!important;letter-spacing:.45em;text-align:center;padding-left:.45em!important}
-.inbox{position:fixed;left:16px;bottom:16px;z-index:210;width:min(340px,calc(100vw - 32px));background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 40px rgba(6,24,44,.25);overflow:hidden;animation:pop .2s}
-.inbox header{display:flex;align-items:center;gap:8px;background:var(--primary);color:#fff;padding:8px 12px;font-size:12.5px;font-weight:600}
-.inbox header .spacer{flex:1}
-.inbox header button{border:0;background:transparent;color:#fff;cursor:pointer;font-size:18px;line-height:1;padding:2px 4px}
-.inbox .mail{padding:12px 14px;display:grid;gap:4px;font-size:13.5px}
-.inbox .code{font:700 26px var(--mono);letter-spacing:.2em;color:var(--primary);background:var(--accent-soft);border-radius:8px;padding:6px 10px;justify-self:start}
 .stabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
 .stab{flex:none;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px 14px;font-weight:600;font-size:14px;cursor:pointer;color:var(--muted);min-height:42px;display:inline-flex;align-items:center;gap:8px}
 .stab.active{background:var(--primary);border-color:var(--primary);color:#fff}
@@ -453,3 +447,7 @@ table.one-line td.reason{max-width:340px;overflow:hidden;text-overflow:ellipsis}
 .pref span.hint{display:block;font-weight:400}
 .kv{grid-template-columns:minmax(0,1fr) auto}.kv dd{white-space:nowrap}
 .brand{gap:10px;padding-right:0}.brand b{font-size:15px;letter-spacing:-.01em}.brand .collapse-btn{width:30px;margin-right:-4px}
+
+/* ---------- boot ---------- */
+.boot{position:fixed;inset:0;display:grid;place-content:center;justify-items:center;gap:14px;background:var(--primary);color:#fff;font:600 15px var(--body);z-index:300}
+.boot img{width:64px;height:64px;border-radius:16px;animation:pop .6s ease-in-out infinite alternate}

@@ -15,8 +15,8 @@ const charts = {};
 function startApp(fresh, msg) {
   const u = user(); if (!u) return showAuth();
   if (!u.bizId) return showBizStep();
-  if (BIZ !== u.bizId) loadBiz(u.bizId);
-  $('#auth').hidden = true; $('#app').hidden = false;
+  if (BIZ !== u.bizId) return afterAuth(msg, fresh);
+  $('#boot').hidden = true; $('#auth').hidden = true; $('#app').hidden = false;
   buildNav(); refreshProfile(); updateBell();
   if (fresh) loginChecks(msg);
   const h = location.hash.slice(1);
@@ -36,13 +36,15 @@ function businessMode(target, after) {
   openModal('Business mode', AppView.businessModeModal({b}),
     `<button class="btn ghost" data-close>Cancel</button><button class="btn primary" id="bmGo">${icon('unlock')}Unlock</button>`, {small: true});
   $('#bmForm').onsubmit = e => { e.preventDefault(); $('#bmGo').click(); };
-  $('#bmGo').onclick = () => {
-    if (hash($('#bmPass').value) !== b.pass) { $('#bmErr').textContent = 'Incorrect business password.'; $('#bmPass').value = ''; $('#bmPass').focus(); return; }
+  $('#bmGo').onclick = () => busy($('#bmGo'), async () => {
+    const {data: ok, error} = await sb.rpc('check_business_password', {p_password: $('#bmPass').value});
+    if (error) { $('#bmErr').textContent = authMsg(error); return; }
+    if (!ok) { $('#bmErr').textContent = 'Incorrect business password.'; $('#bmPass').value = ''; $('#bmPass').focus(); return; }
     session.unlock(user().id);
     notify('info', 'Business mode opened', `${user().fullname} opened business mode.`);
     closeModal(); buildNav(); toast('Business mode unlocked.', 'success');
     if (after) after(); else go(target && target !== 'pos' ? target : 'dashboard');
-  };
+  });
 }
 
 function lockBusiness() { session.lock(); current = 'pos'; buildNav(); go('pos'); toast('Back to cashier mode. Business screens are locked.'); }
@@ -118,17 +120,33 @@ function accountModal() {
     AppView.accountModalButtons(), {noFocus: true});
   $('#amOut').onclick = () => { closeModal(); logout(); };
   $('#amEm').onsubmit = e => { e.preventDefault(); if ($('#amEmail').value.trim().toLowerCase() === u.email) return toast('That is already your email.', 'warn'); changeEmail(u, $('#amEmail').value, refreshProfile); };
-  $('#amPw').onsubmit = e => { e.preventDefault(); changePassword(u, $('#am0') || {}, $('#am1'), $('#am2')); };
+  $('#amPw').onsubmit = e => { e.preventDefault(); busy(e.submitter, () => changePassword(u, $('#am0') || {}, $('#am1'), $('#am2'))); };
 }
 
 $('#logoutBtn').addEventListener('click', logout);
 
 function logout() {
-  confirmBox('Log out of KitaKo? Items in the current cart stay saved for next time.', () => {
-    session.clear(); Object.values(charts).forEach(c => c.destroy()); current = 'pos'; $('#content').innerHTML = '';
-    try { history.replaceState(null, '', location.pathname + location.search); } catch { location.hash = ''; }
+  confirmBox('Log out of KitaKo? Items in the current cart stay saved on this device for next time.', async () => {
+    await signOutCloud(); leaveApp();
     showAuth(); toast('You have been logged out.');
   }, {title: 'Log out', ok: 'Log out'});
 }
+
+function leaveApp() {
+  Object.values(charts).forEach(c => c.destroy()); for (const k in charts) delete charts[k]; current = 'pos'; $('#content').innerHTML = '';
+  try { history.replaceState(null, '', location.pathname + location.search); } catch { location.hash = ''; }
+}
+
+/* another device changed this business's data: refresh what is on screen, unless the person is typing or a dialog is open */
+let remotePending = false;
+function refreshFromRemote() {
+  if ($('#app').hidden) return;
+  updateBell();
+  const a = document.activeElement, typing = a && a.matches('input, textarea, select') && $('#content').contains(a);
+  if (!$('#modal').hidden || !$('#confirm').hidden || typing) { remotePending = true; return; }
+  remotePending = false; refreshProfile(); rerender();
+}
+ModelEvents.on('data:remote', refreshFromRemote);
+setInterval(() => { if (remotePending) refreshFromRemote(); }, 3000);
 
 function tick() { const c = $('#clock'); if (c) c.textContent = new Date().toLocaleString('en-PH', {weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit'}); }

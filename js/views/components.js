@@ -1,4 +1,4 @@
-/* KitaKo — VIEW · Shared UI: icons, toasts, modals, charts, receipt layout, simulated inbox. */
+/* KitaKo — VIEW · Shared UI: icons, toasts, modals, charts, receipt layout. */
 'use strict';
 
 const ICONS = {
@@ -86,19 +86,12 @@ function fieldErr(input, msg) { input.classList.add('invalid'); input.focus(); t
 const pwField = (id, ac = 'new-password') => `<span class="pw"><input id="${id}" type="password" autocomplete="${ac}"><button type="button" class="pw-toggle" aria-label="Show password" title="Show password">${icon('eye')}</button></span>`;
 
 /* views react to model events */
-ModelEvents.on('otp:sent', (email, purpose, code) => showInbox(email, purpose, code));
-
 ModelEvents.on('notifications:changed', () => updateBell());
 
 ModelEvents.on('cart:itemsRemoved', () => toast('Removed deleted product(s) from the cart.', 'warn'));
 
-ModelEvents.on('storage:error', () => toast('Browser storage is unavailable — changes will be lost on refresh.', 'error'));
+ModelEvents.on('sync:error', e => toast('Could not save to the server (' + authMsg(e) + '). KitaKo will keep retrying — keep this page open.', 'error'));
 
-function showInbox(email, purpose, code) {
-  $('#inboxMail').innerHTML = `<div class="hint">To: <b>${esc(email)}</b> · From: KitaKo &lt;no-reply@kitako.ph&gt;</div>
-    <div><b>Your KitaKo ${esc(purpose)} code</b></div><div class="code" id="inboxCode">${code}</div><div class="hint">Expires in 5 minutes. Never share this code with anyone.</div>`;
-  $('#inbox').hidden = false;
-}
 
 const PALETTE = ['#0B3866','#95F9C3','#2F7BC8','#3CCB8A','#F59E0B','#7DD3FC','#1E9E8F','#A78BFA','#94A3B8','#EA580C'];
 

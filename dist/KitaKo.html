@@ -358,12 +358,6 @@ details.more[open] summary{margin-bottom:8px}
 .steps .done i{background:var(--accent);color:var(--primary)}
 .steps b{width:18px;height:1px;background:var(--line)}
 .otp-input{font:700 28px var(--mono)!important;letter-spacing:.45em;text-align:center;padding-left:.45em!important}
-.inbox{position:fixed;left:16px;bottom:16px;z-index:210;width:min(340px,calc(100vw - 32px));background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 40px rgba(6,24,44,.25);overflow:hidden;animation:pop .2s}
-.inbox header{display:flex;align-items:center;gap:8px;background:var(--primary);color:#fff;padding:8px 12px;font-size:12.5px;font-weight:600}
-.inbox header .spacer{flex:1}
-.inbox header button{border:0;background:transparent;color:#fff;cursor:pointer;font-size:18px;line-height:1;padding:2px 4px}
-.inbox .mail{padding:12px 14px;display:grid;gap:4px;font-size:13.5px}
-.inbox .code{font:700 26px var(--mono);letter-spacing:.2em;color:var(--primary);background:var(--accent-soft);border-radius:8px;padding:6px 10px;justify-self:start}
 .stabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
 .stab{flex:none;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px 14px;font-weight:600;font-size:14px;cursor:pointer;color:var(--muted);min-height:42px;display:inline-flex;align-items:center;gap:8px}
 .stab.active{background:var(--primary);border-color:var(--primary);color:#fff}
@@ -465,9 +459,15 @@ table.one-line td.reason{max-width:340px;overflow:hidden;text-overflow:ellipsis}
 .kv{grid-template-columns:minmax(0,1fr) auto}.kv dd{white-space:nowrap}
 .brand{gap:10px;padding-right:0}.brand b{font-size:15px;letter-spacing:-.01em}.brand .collapse-btn{width:30px;margin-right:-4px}
 
+/* ---------- boot ---------- */
+.boot{position:fixed;inset:0;display:grid;place-content:center;justify-items:center;gap:14px;background:var(--primary);color:#fff;font:600 15px var(--body);z-index:300}
+.boot img{width:64px;height:64px;border-radius:16px;animation:pop .6s ease-in-out infinite alternate}
+
 </style>
 </head>
 <body>
+
+<div class="boot" id="boot" role="status"><img src="data:image/png;base64,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" alt=""><span>Loading KitaKo…</span></div>
 
 <!-- ============ AUTH ============ -->
 <section id="auth" class="auth" hidden>
@@ -488,7 +488,7 @@ table.one-line td.reason{max-width:340px;overflow:hidden;text-overflow:ellipsis}
       <button class="tab" data-auth-tab="register" role="tab">Create account</button>
     </div>
     <button class="btn google block" id="googleBtn" type="button"><img class="g-logo" alt="" src="data:image/png;base64,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"><span id="googleLbl">Continue with Google</span></button>
-    <div class="divider">or</div>
+    <div class="divider" id="authOr">or</div>
 
     <form id="loginForm" class="form" novalidate>
       <label>Username or email<input id="loginUser" autocomplete="username" required></label>
@@ -515,7 +515,7 @@ table.one-line td.reason{max-width:340px;overflow:hidden;text-overflow:ellipsis}
         <label>Password *<span class="pw"><input id="regPass" type="password" autocomplete="new-password" required><button type="button" class="pw-toggle" aria-label="Show password" title="Show password"><span data-ico="eye"></span></button></span></label>
         <label>Confirm password *<span class="pw"><input id="regPass2" type="password" autocomplete="new-password" required><button type="button" class="pw-toggle" aria-label="Show password" title="Show password"><span data-ico="eye"></span></button></span></label>
       </div>
-      <p class="hint" id="regNext">Next, we'll email you a 6-digit code to verify your address.</p>
+      <p class="hint" id="regNext">Next, we'll email you a code to verify your address.</p>
       <p class="form-error" id="regError" role="alert"></p>
       <button class="btn primary block" type="submit" id="regSubmit">Continue</button>
     </form>
@@ -551,8 +551,6 @@ table.one-line td.reason{max-width:340px;overflow:hidden;text-overflow:ellipsis}
   </div>
 </section>
 
-<!-- simulated email inbox (prototype has no mail server) -->
-<div class="inbox" id="inbox" hidden role="status" aria-live="polite"><header><span>Simulated email inbox</span><span class="spacer"></span><button id="inboxClose" aria-label="Close inbox">×</button></header><div class="mail" id="inboxMail"></div></div>
 
 <!-- ============ APP ============ -->
 <div id="app" class="app" hidden>
@@ -587,19 +585,19 @@ table.one-line td.reason{max-width:340px;overflow:hidden;text-overflow:ellipsis}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <!-- app code: utils → models → views → controllers → boot (plain scripts, no build step needed) -->
 <script>/* js/config.js */
-/* KitaKo — Config. Settings you fill in once per deployment. */
+/* KitaKo — Config. Fill these in once with your Supabase project's values. */
 'use strict';
 
-/* Google Sign-In (Google Identity Services).
-   1. Google Cloud Console → APIs & Services → Credentials → Create credentials → OAuth client ID → "Web application".
-   2. Under "Authorized JavaScript origins" add the address you open KitaKo from, e.g. http://localhost:5500
-      (Google does not allow file:// pages — serve the folder, e.g. `python -m http.server 5500`).
-   3. Paste the client ID below (it looks like 1234-abc.apps.googleusercontent.com).
-   Left empty, "Continue with Google" falls back to a simulated sign-in. */
-const GOOGLE_CLIENT_ID = '';
+/* Supabase dashboard → Project Settings → API (or the "Connect" button):
+   - Project URL                       e.g. https://abcdefghijklmnop.supabase.co
+   - Publishable key (sb_publishable_…) or the legacy "anon" public key.
+   Both are safe to put in a web page: Row Level Security in supabase/schema.sql decides what each login can see.
+   Never put the secret / service_role key here. */
+const SUPABASE_URL = 'https://eziwjlidknsvgledotuy.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_LvfHywm6js2rgTiwKvScTg_I8kHhe6U';
 
 </script>
 <script>/* js/utils.js */
@@ -645,16 +643,18 @@ const fmtDT = d => fmtDate(d) + ' ' + fmtTime(d);
 
 const ago = d => { const s = (Date.now() - new Date(d)) / 1000; if (s < 60) return 'just now'; if (s < 3600) return Math.floor(s / 60) + ' min ago'; if (s < 86400) return Math.floor(s / 3600) + ' h ago'; return fmtDT(d); };
 
-const hash = str => { let h1 = 0xdeadbeef, h2 = 0x41c6ce57; for (let i = 0; i < str.length; i++) { const c = str.charCodeAt(i); h1 = Math.imul(h1 ^ c, 2654435761); h2 = Math.imul(h2 ^ c, 1597334677); } h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909); h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909); return 'h' + (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36); };
 
 </script>
 <script>/* js/models/Store.js */
-/* KitaKo — MODEL · Storage. All data lives in localStorage: global keys (users, businesses) plus one set of keys per business. */
+/* KitaKo — MODEL · Storage. Accounts and data live in Supabase (see supabase/schema.sql).
+   The app works on the in-memory state S; save(key) sends the changed parts to Supabase in the background. */
 'use strict';
 
 /* storage
-   Global (all businesses):  kk_users, kk_businesses, kk_session
-   Per business:             kk_b_<businessId>_<key>   — each business has its own menu, sales, stock and settings */
+   Supabase tables:  profiles (accounts), businesses, business_secrets (business password), business_data
+   business_data:    one row per data type and business — settings, products, … —
+                     sales and stock moves get one row per month (txns:2026-11, stockMoves:2026-11)
+   This device only: the open cart (kk_cart_<business>_<user>), sidebar setting, "remember me" */
 /* Models never touch the screen. They announce changes here and views subscribe (observer pattern). */
 const ModelEvents = {
   handlers: {},
@@ -664,39 +664,266 @@ const ModelEvents = {
 
 const GP = 'kk_';
 
-const GLOBAL_KEYS = ['users','businesses'];
-
 const KEYS = ['settings','categories','products','txns','held','discounts','register','notifs','stockMoves','cart','meta'];
+
+const LOCAL_KEYS = ['cart'];                      // each device keeps its own open order
+
+const PART = {txns: 'date', stockMoves: 'at'};    // saved as one row per month, by this date field
 
 const S = {users: [], businesses: []};
 
-let BIZ = null, storageOK = true;
+let BIZ = null, AUTH = null;                      // current business id, signed-in Supabase user
 
-const keyFor = k => GLOBAL_KEYS.includes(k) ? GP + k : GP + 'b_' + BIZ + '_' + k;
-
-const store = {
-  get(k, d) { try { const v = localStorage.getItem(keyFor(k)); return v == null ? d : JSON.parse(v); } catch { storageOK = false; return d; } },
-  set(k, v) { try { localStorage.setItem(keyFor(k), JSON.stringify(v)); } catch { if (storageOK) ModelEvents.emit('storage:error'); storageOK = false; } }
+/* "Remember me": the Supabase session is kept in localStorage, otherwise only for this browser tab */
+const authStorage = {
+  getItem(k) { try { return localStorage.getItem(k) ?? sessionStorage.getItem(k); } catch { return null; } },
+  setItem(k, v) { try { const keep = localStorage.getItem(GP + 'remember') !== '0'; (keep ? localStorage : sessionStorage).setItem(k, v); (keep ? sessionStorage : localStorage).removeItem(k); } catch {} },
+  removeItem(k) { try { localStorage.removeItem(k); sessionStorage.removeItem(k); } catch {} }
 };
 
-const save = (...ks) => (ks.length ? ks : KEYS).forEach(k => { if (GLOBAL_KEYS.includes(k) || BIZ) store.set(k, S[k]); });
+const rememberMe = on => { try { localStorage.setItem(GP + 'remember', on ? '1' : '0'); } catch {} };
 
-function loadGlobal() { GLOBAL_KEYS.forEach(k => { S[k] = store.get(k, null); if (!Array.isArray(S[k])) S[k] = []; }); }
-
-function loadBiz(id) {
-  BIZ = id; KEYS.forEach(k => { S[k] = store.get(k, null); });
-  if (!S.settings || !S.products) { const b = S.businesses.find(x => x.id === id); seedBusiness(false, {name: b?.name || DEFAULT_SETTINGS.name}); } else normalize();
-}
+const sb = window.supabase && SUPABASE_URL && SUPABASE_KEY
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth: {storage: authStorage, persistSession: true, autoRefreshToken: true, detectSessionInUrl: true}})
+  : null;
 
 const session = {
-  _mem: null, _unlock: null,
-  get() { try { return localStorage.getItem(GP + 'session') || sessionStorage.getItem(GP + 'session') || session._mem; } catch { return session._mem; } },
-  set(id, remember) { session._mem = id; try { (remember ? localStorage : sessionStorage).setItem(GP + 'session', id); } catch {} },
-  clear() { session._mem = null; session.lock(); try { localStorage.removeItem(GP + 'session'); sessionStorage.removeItem(GP + 'session'); } catch {} },
+  _unlock: null,
+  get() { return AUTH?.id || null; },
   unlocked() { try { return sessionStorage.getItem(GP + 'unlock') || session._unlock; } catch { return session._unlock; } },
   unlock(id) { session._unlock = id; try { sessionStorage.setItem(GP + 'unlock', id); } catch {} },
   lock() { session._unlock = null; try { sessionStorage.removeItem(GP + 'unlock'); } catch {} }
 };
+
+/* ---------- accounts ---------- */
+const toUser = (p, au) => {
+  const u = {id: p.id, fullname: p.fullname || '', username: p.username || '', email: p.email || '', role: p.role, bizId: p.biz_id, created: p.created_at};
+  if (au) { const prov = au.app_metadata?.providers || [au.app_metadata?.provider];
+    u.pass = prov.includes('email') || !!au.user_metadata?.has_password; u.google = prov.includes('google'); }
+  return u;
+};
+
+const toBiz = b => ({id: b.id, username: b.username, name: b.name, ownerId: b.owner_id, created: b.created_at});
+
+/* ---------- local-only keys ---------- */
+const localKey = k => GP + k + '_' + BIZ + '_' + (AUTH?.id || '');
+const localGet = k => { try { const v = localStorage.getItem(localKey(k)); return v == null ? null : JSON.parse(v); } catch { return null; } };
+const localSet = (k, v) => { try { localStorage.setItem(localKey(k), JSON.stringify(v)); } catch {} };
+
+/* ---------- monthly rows for sales and stock moves ---------- */
+const monthOf = v => { const d = new Date(v); return isNaN(d) ? '0000-00' : d.toISOString().slice(0, 7); };
+const baseKey = rk => rk.split(':')[0];
+const emptyFor = rk => (PART[baseKey(rk)] || Array.isArray(S[rk])) ? [] : {};
+
+function partsOf(k) {
+  const out = {};
+  Object.keys(cloud.synced).filter(rk => rk.startsWith(k + ':')).forEach(rk => { out[rk] = []; });   // emptied months are saved as []
+  (S[k] || []).forEach(x => { const rk = k + ':' + monthOf(x[PART[k]]); (out[rk] = out[rk] || []).push(x); });
+  return out;
+}
+
+// sales: oldest month first (newest sale last); stock moves: newest first
+function joinParts(k, parts) {
+  const dir = k === 'txns' ? 1 : -1;
+  return Object.keys(parts).filter(rk => rk.startsWith(k + ':')).sort((a, b) => dir * a.localeCompare(b)).flatMap(rk => parts[rk] || []);
+}
+
+const rowsFor = k => LOCAL_KEYS.includes(k) ? {} : PART[k] ? partsOf(k) : {[k]: S[k]};
+const currentRow = rk => PART[baseKey(rk)] ? (partsOf(baseKey(rk))[rk] || []) : S[rk];
+
+function applyRow(rk, val) {
+  const k = baseKey(rk);
+  if (PART[k]) { const parts = partsOf(k); parts[rk] = val; S[k] = joinParts(k, parts); } else S[k] = val;
+}
+
+/* ---------- merging when two devices changed the same row ----------
+   base = what this device last read, local = this device now, remote = what the other device saved.
+   Lists of records merge per record (adds, edits and deletes from both sides are kept; stock counts add up);
+   settings-like objects merge per field. */
+const J = v => JSON.stringify(v);
+const isObj = v => v && typeof v === 'object' && !Array.isArray(v);
+const SORT = {txns: (a, b) => String(a.date).localeCompare(String(b.date)), stockMoves: (a, b) => String(b.at).localeCompare(String(a.at)),
+  notifs: (a, b) => String(b.at).localeCompare(String(a.at)), held: (a, b) => String(b.at).localeCompare(String(a.at))};
+
+function mergeObj(b, l, r) {
+  if (!isObj(l) || !isObj(r)) return J(l) !== J(b) ? l : r;
+  b = isObj(b) ? b : {};
+  const out = {...r};
+  for (const f of new Set([...Object.keys(l), ...Object.keys(b)])) {
+    if (!(f in l)) { if (f in b) delete out[f]; continue; }
+    if (J(l[f]) === J(b[f])) continue;
+    out[f] = f === 'stock' && [l[f], b[f], r[f]].every(n => typeof n === 'number') ? r2(r[f] + l[f] - b[f]) : l[f];
+  }
+  return out;
+}
+
+function merge3(base, local, remote, rk) {
+  if (local == null) return remote;
+  if (remote == null) return local;
+  const k = baseKey(rk), withId = a => Array.isArray(a) && a.every(x => x && x.id != null);
+  if (withId(local) && withId(remote)) {
+    const B = new Map((withId(base) ? base : []).map(x => [x.id, x])), L = new Map(local.map(x => [x.id, x])), R = new Set(remote.map(x => x.id));
+    const out = [];
+    remote.forEach(r => {
+      if (B.has(r.id) && !L.has(r.id)) return;                                   // deleted on this device
+      const l = L.get(r.id);
+      out.push(!l ? r : B.has(r.id) ? mergeObj(B.get(r.id), l, r) : l);
+    });
+    local.forEach(l => { if (!R.has(l.id) && !B.has(l.id)) out.push(l); });     // added on this device
+    return SORT[k] ? out.sort(SORT[k]) : out;
+  }
+  if (isObj(local) && isObj(remote)) {
+    const out = mergeObj(base, local, remote);
+    if (k === 'meta') out.receiptCounter = Math.max(local.receiptCounter || 0, remote.receiptCounter || 0);
+    return out;
+  }
+  return J(local) !== J(base) ? local : remote;
+}
+
+/* ---------- sync with Supabase ---------- */
+const cloud = {
+  synced: {},          // row key → {v: version, j: JSON this device last saw on the server}
+  dirty: new Set(), timer: null, chain: Promise.resolve(), pending: 0, channel: null, poller: null, lastErr: 0,
+
+  schedule(ms = 250) { clearTimeout(this.timer); this.timer = setTimeout(() => this.flush(), ms); },
+  queue(fn) { this.pending++; const p = this.chain.then(fn).finally(() => { this.pending--; }); this.chain = p.catch(() => {}); return p; },
+  flush() { clearTimeout(this.timer); return this.queue(() => this._flush()); },
+  pull() { return this.queue(() => this._pull()); },
+  busy() { return this.pending > 0 || this.dirty.size > 0; },
+
+  async _flush() {
+    const biz = BIZ, ks = [...this.dirty]; this.dirty.clear();
+    if (!biz || !sb) return;
+    for (const k of ks) {
+      try {
+        for (const [rk, val] of Object.entries(rowsFor(k))) { if (J(val) !== this.synced[rk]?.j) await this._put(biz, rk); }
+      } catch (e) {
+        if (BIZ !== biz) return;
+        this.dirty.add(k); this.schedule(8000);
+        if (Date.now() - this.lastErr > 60e3) { this.lastErr = Date.now(); ModelEvents.emit('sync:error', e); }
+      }
+    }
+  },
+
+  async _put(biz, rk) {
+    for (let i = 0; i < 5 && BIZ === biz; i++) {
+      const val = currentRow(rk), j = J(val), base = this.synced[rk];
+      if (j === base?.j) return;
+      const {data: v, error} = await sb.rpc('put_data', {p_biz: biz, p_key: rk, p_value: val, p_version: base?.v || 0});
+      if (error) throw error;
+      if (v != null) { this.synced[rk] = {v, j}; this.announce(rk, v); return; }
+      // another device saved this row first: merge its version with ours, then try again
+      const {data: row, error: e2} = await sb.from('business_data').select('value,version').eq('biz_id', biz).eq('key', rk).maybeSingle();
+      if (e2) throw e2;
+      if (BIZ !== biz) return;
+      if (!row) { delete this.synced[rk]; continue; }
+      const merged = merge3(base ? JSON.parse(base.j) : emptyFor(rk), currentRow(rk), row.value, rk);
+      this.synced[rk] = {v: row.version, j: J(row.value)};
+      applyRow(rk, merged); ModelEvents.emit('data:remote', [baseKey(rk)]);
+    }
+  },
+
+  // read rows another device changed since this device last saw them
+  async _pull() {
+    const biz = BIZ; if (!biz || !sb) return;
+    const {data: list, error} = await sb.from('business_data').select('key,version').eq('biz_id', biz);
+    if (error || BIZ !== biz) return;
+    const stale = list.filter(r => (this.synced[r.key]?.v || 0) < r.version).map(r => r.key);
+    if (!stale.length) return;
+    const {data: rows, error: e2} = await sb.from('business_data').select('key,value,version').eq('biz_id', biz).in('key', stale);
+    if (e2 || BIZ !== biz) return;
+    const changed = new Set();
+    rows.forEach(r => {
+      const base = this.synced[r.key], local = currentRow(r.key);
+      const merged = merge3(base ? JSON.parse(base.j) : emptyFor(r.key), local, r.value, r.key);
+      this.synced[r.key] = {v: r.version, j: J(r.value)};
+      applyRow(r.key, merged); changed.add(baseKey(r.key));
+      if (J(merged) !== J(r.value)) this.dirty.add(baseKey(r.key));
+    });
+    if (S.settings) normalize();
+    if (this.dirty.size) this.schedule();
+    ModelEvents.emit('data:remote', [...changed]);
+  },
+
+  // tell other open devices of this business to pull (best effort; the poll below catches anything missed)
+  announce(key, v) { try { this.channel?.send({type: 'broadcast', event: 'put', payload: {key, v}}); } catch {} },
+
+  start() {
+    this.stop(); const biz = BIZ;
+    try {
+      this.channel = sb.channel('kk-biz-' + biz).on('broadcast', {event: 'put'}, ({payload}) => {
+        if (BIZ === biz && (this.synced[payload?.key]?.v || 0) < payload?.v) this.pull();
+      }).subscribe();
+    } catch { this.channel = null; }
+    this.poller = setInterval(() => { if (!document.hidden) this.pull(); }, 20e3);
+  },
+
+  stop() { clearInterval(this.poller); this.poller = null; if (this.channel) { try { sb.removeChannel(this.channel); } catch {} this.channel = null; } }
+};
+
+document.addEventListener('visibilitychange', () => { if (!document.hidden && BIZ) cloud.pull(); });
+
+window.addEventListener('beforeunload', e => { if (BIZ && cloud.busy()) { cloud.flush(); e.preventDefault(); e.returnValue = ''; } });
+
+const save = (...ks) => {
+  (ks.length ? ks : KEYS).forEach(k => {
+    if (k === 'businesses') return saveBizName();
+    if (LOCAL_KEYS.includes(k)) { if (BIZ) localSet(k, S[k]); return; }
+    if (BIZ && KEYS.includes(k)) cloud.dirty.add(k);
+  });
+  if (cloud.dirty.size) cloud.schedule();
+};
+
+async function saveBizName() {
+  const b = S.businesses.find(x => x.id === BIZ); if (!b || !sb) return;
+  const {error} = await sb.from('businesses').update({name: b.name}).eq('id', b.id);
+  if (error) ModelEvents.emit('sync:error', error);
+}
+
+/* the signed-in account, its business and coworkers */
+async function loadMe() {
+  const {data: {user: au}, error} = await sb.auth.getUser();
+  if (error || !au) { AUTH = null; return null; }
+  AUTH = au;
+  const {data: p, error: e1} = await sb.from('profiles').select('*').eq('id', au.id).maybeSingle();
+  if (e1) throw e1;
+  S.users = []; S.businesses = [];
+  if (!p) return null;
+  S.users.push(toUser(p, au));
+  if (p.biz_id) {
+    const [b, staff] = await Promise.all([sb.from('businesses').select('*').eq('id', p.biz_id).maybeSingle(), sb.from('profiles').select('*').eq('biz_id', p.biz_id)]);
+    if (b.error) throw b.error;
+    if (b.data) S.businesses.push(toBiz(b.data));
+    (staff.data || []).forEach(x => { if (x.id !== p.id) S.users.push(toUser(x)); });
+  }
+  return S.users[0];
+}
+
+async function loadBiz(id) {
+  cloud.stop(); BIZ = id; cloud.synced = {}; cloud.dirty.clear();
+  const {data, error} = await sb.from('business_data').select('key,value,version').eq('biz_id', id);
+  if (error) { BIZ = null; throw error; }
+  const rows = {};
+  data.forEach(r => { rows[r.key] = r.value; cloud.synced[r.key] = {v: r.version, j: J(r.value)}; });
+  KEYS.forEach(k => { S[k] = LOCAL_KEYS.includes(k) ? localGet(k) : PART[k] ? joinParts(k, rows) : (rows[k] ?? null); });
+  if (!S.settings || !S.products) { const b = S.businesses.find(x => x.id === id); seedBusiness(false, {name: b?.name || DEFAULT_SETTINGS.name}); } else normalize();
+  cloud.start();
+}
+
+/* a new business: fill it with defaults (and optional sample data) and wait until it is saved */
+async function createBizData(id, withSamples, info) {
+  cloud.stop(); BIZ = id; cloud.synced = {}; cloud.dirty.clear();
+  seedBusiness(withSamples, info);
+  await cloud.flush();
+  if (cloud.dirty.size) throw new Error('Could not save the new business data. Check your internet connection.');
+  cloud.start();
+}
+
+async function signOutCloud() {
+  if (BIZ && cloud.busy()) { try { await cloud.flush(); } catch {} }
+  cloud.stop(); session.lock(); BIZ = null; AUTH = null; S.users = []; S.businesses = [];
+  if (sb) { try { await sb.auth.signOut(); } catch {} }
+}
 
 function normalize() {
   S.settings = {...DEFAULT_SETTINGS, ...(S.settings || {})};
@@ -814,12 +1041,12 @@ function seedBusiness(withSamples, info = {}) {
 
 </script>
 <script>/* js/models/AccountModel.js */
-/* KitaKo — MODEL · Accounts, roles, access rules and one-time email codes. */
+/* KitaKo — MODEL · Accounts, roles and access rules. Sign-in itself is Supabase Auth (see AuthController). */
 'use strict';
 
 const user = () => S.users.find(u => u.id === session.get());
 
-const business = () => S.businesses.find(b => b.id === BIZ);
+const business = () => S.businesses.find(b => b.id === BIZ) || S.businesses.find(b => b.id === user()?.bizId);
 
 const isOwner = () => user()?.role === 'owner';
 
@@ -832,25 +1059,19 @@ const canAccess = page => CASHIER_PAGES.includes(page) || unlocked();
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/, USER_RE = /^[a-zA-Z0-9_.]{3,20}$/, BIZ_RE = /^[a-z0-9][a-z0-9-]{2,29}$/;
 
-/* ---------- email one-time codes (simulated inbox: a frontend-only prototype has no mail server) ---------- */
-const OTP = {};
-
-const OTP_TTL = 5 * 60e3, OTP_COOLDOWN = 30e3, OTP_TRIES = 5;
-
-function sendOtp(email, purpose) {
-  const code = String(100000 + Math.floor(Math.random() * 900000));
-  OTP[email + '|' + purpose] = {h: hash(code), exp: Date.now() + OTP_TTL, tries: 0, sent: Date.now()};
-  ModelEvents.emit('otp:sent', email, purpose, code);   // simulated delivery (no mail server in a frontend-only app)
-}
-
-function checkOtp(email, purpose, code) {
-  const k = email + '|' + purpose, o = OTP[k];
-  if (!o) return 'No code was sent. Tap “Resend code”.';
-  if (Date.now() > o.exp) return 'This code has expired. Tap “Resend code”.';
-  if (o.tries >= OTP_TRIES) return 'Too many wrong attempts. Tap “Resend code”.';
-  if (!/^\d{6}$/.test(code)) return 'Enter the 6-digit code.';
-  if (hash(code) !== o.h) { o.tries++; return `Incorrect code. ${OTP_TRIES - o.tries} attempt${OTP_TRIES - o.tries === 1 ? '' : 's'} left.`; }
-  delete OTP[k]; return null;
+/* Supabase errors → messages people can act on */
+function authMsg(e) {
+  const m = String(e?.message || e || 'Something went wrong.');
+  if (e?.code === '23505') return 'That name is already taken.';
+  if (/Invalid login credentials/i.test(m)) return 'Incorrect username/email or password.';
+  if (/rate limit|too many|security purposes|only request this after/i.test(m)) return 'Too many attempts or emails. Wait a minute, then try again.';
+  if (/expired|invalid.*(otp|token)|otp.*invalid/i.test(m)) return 'That code is wrong or has expired. Check the latest email, or tap “Resend code”.';
+  if (/already registered|already been registered|already exists/i.test(m)) return 'An account with that email already exists. Log in instead.';
+  if (/Password should be|weak password/i.test(m)) return m;
+  if (/provider is not enabled|Unsupported provider/i.test(m)) return 'Google sign-in is not turned on in Supabase yet (Authentication → Sign In / Providers → Google).';
+  if (/Failed to fetch|NetworkError|Load failed|fetch/i.test(m)) return 'Cannot reach the server. Check your internet connection and try again.';
+  if (/Database error saving new user/i.test(m)) return 'The account could not be created. Make sure supabase/schema.sql was run on your project.';
+  return m;
 }
 
 </script>
@@ -1027,7 +1248,7 @@ function shiftNumbers(s, endAt) {
 
 </script>
 <script>/* js/views/components.js */
-/* KitaKo — VIEW · Shared UI: icons, toasts, modals, charts, receipt layout, simulated inbox. */
+/* KitaKo — VIEW · Shared UI: icons, toasts, modals, charts, receipt layout. */
 'use strict';
 
 const ICONS = {
@@ -1115,19 +1336,12 @@ function fieldErr(input, msg) { input.classList.add('invalid'); input.focus(); t
 const pwField = (id, ac = 'new-password') => `<span class="pw"><input id="${id}" type="password" autocomplete="${ac}"><button type="button" class="pw-toggle" aria-label="Show password" title="Show password">${icon('eye')}</button></span>`;
 
 /* views react to model events */
-ModelEvents.on('otp:sent', (email, purpose, code) => showInbox(email, purpose, code));
-
 ModelEvents.on('notifications:changed', () => updateBell());
 
 ModelEvents.on('cart:itemsRemoved', () => toast('Removed deleted product(s) from the cart.', 'warn'));
 
-ModelEvents.on('storage:error', () => toast('Browser storage is unavailable — changes will be lost on refresh.', 'error'));
+ModelEvents.on('sync:error', e => toast('Could not save to the server (' + authMsg(e) + '). KitaKo will keep retrying — keep this page open.', 'error'));
 
-function showInbox(email, purpose, code) {
-  $('#inboxMail').innerHTML = `<div class="hint">To: <b>${esc(email)}</b> · From: KitaKo &lt;no-reply@kitako.ph&gt;</div>
-    <div><b>Your KitaKo ${esc(purpose)} code</b></div><div class="code" id="inboxCode">${code}</div><div class="hint">Expires in 5 minutes. Never share this code with anyone.</div>`;
-  $('#inbox').hidden = false;
-}
 
 const PALETTE = ['#0B3866','#95F9C3','#2F7BC8','#3CCB8A','#F59E0B','#7DD3FC','#1E9E8F','#A78BFA','#94A3B8','#EA580C'];
 
@@ -1281,29 +1495,24 @@ function shiftPDF(s, interim) {
 const AuthView = {
   verifyEmailModal({email, intro}) {
     return `<form class="form" id="otpForm" novalidate>${intro ? `<p style="margin:0">${intro}</p>` : ''}
-      <p class="hint">We sent a 6-digit code to <b>${esc(email)}</b>. Enter it below.</p>
-      <label>Verification code<input id="otpCode" class="otp-input" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000"></label>
+      <p class="hint">We sent a code to <b>${esc(email)}</b>. Enter it below.</p>
+      <label>Verification code<input id="otpCode" class="otp-input" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="000000"></label>
       <p class="form-error" id="otpErr" role="alert"></p>
       <div class="row-between"><span class="hint" id="otpTimer"></span><button type="button" class="link" id="otpResend">Resend code</button></div></form>`;
   },
 
   gBanner({email}) {
-    return `Signing up with Google as <b>${esc(email)}</b> — Google has already verified this address. <button type="button" class="link" id="gCancel">Use a password instead</button>`;
+    return `Signed in with Google as <b>${esc(email)}</b>. Choose how you'll use KitaKo and pick a username to finish. <button type="button" class="link" id="gCancel">Sign out</button>`;
   },
 
-  googleFlowModal({known}) {
-    return `<div class="note" style="margin-bottom:14px">Simulated Google sign-in — nothing is sent to Google. To use real Google accounts, set GOOGLE_CLIENT_ID in js/config.js and open KitaKo over http(s).</div>
-    ${known.length ? `<div class="section-title">Choose an account</div>${known.map(u => `<button class="acct-row" data-gacct="${esc(u.id)}"><span class="avatar">${esc(u.fullname.slice(0, 1).toUpperCase())}</span><span style="flex:1"><b>${esc(u.fullname)}</b><br><span class="hint">${esc(u.email)}</span></span></button>`).join('')}<div class="section-title" style="margin-top:12px">Use another account</div>` : ''}
-    <form class="form" id="gForm"><label>Name<input id="gName" autocomplete="name"></label><label>Google email<input id="gEmail" type="email" placeholder="you@gmail.com" autocomplete="email"></label><p class="form-error" id="gErr"></p></form>`;
-  },
 
   forgotPasswordModal() {
-    return `<form class="form" id="fpForm"><p class="hint" style="margin:0">Enter your username or email. We'll send a 6-digit code to the email on your account.</p>
+    return `<form class="form" id="fpForm"><p class="hint" style="margin:0">Enter your username or email. We'll email a code to the address on your account.</p>
     <label>Username or email<input id="fpId" autocomplete="username"></label><p class="form-error" id="fpErr"></p></form>`;
   },
 
-  newPasswordModal({u}) {
-    return `<form class="form" id="npForm"><p class="hint" style="margin:0">Email verified for <b>${esc(u.username)}</b>.</p>
+  newPasswordModal({email}) {
+    return `<form class="form" id="npForm"><p class="hint" style="margin:0">Email verified for <b>${esc(email)}</b>.</p>
     <label>New password${pwField('np1')}</label><label>Confirm new password${pwField('np2')}</label><p class="form-error" id="npErr"></p></form>`;
   }
 };
@@ -1337,7 +1546,7 @@ const AppView = {
     <form class="form" id="amPw" style="margin-top:16px"><div class="section-title">${u.pass ? 'Change password' : 'Set a password'}</div>
       ${u.pass ? `<label>Current password${pwField('am0', 'current-password')}</label>` : ''}
       <label>New password${pwField('am1')}</label><label>Confirm new password${pwField('am2')}</label>
-      <button class="btn dark" type="submit">Verify &amp; save password</button></form>`;
+      <button class="btn dark" type="submit">Save password</button></form>`;
   }
 };
 
@@ -1884,12 +2093,12 @@ const SettingsView = {
       <label>Full name *<input id="uName" value="${esc(u.fullname)}"></label>
       <label>Username *<input id="uUser" value="${esc(u.username)}"></label>
       <label>Email *<input id="uEmail" type="email" value="${esc(u.email)}"></label>
-      <p class="hint">Changing your email sends a 6-digit code to the new address.</p>
+      <p class="hint">Changing your email sends a code to the new address.</p>
       <p class="hint">Role: ${owner ? 'Business owner' : 'Cashier'} · ${esc(biz.name)} · signs in with ${u.pass ? 'password' : ''}${u.pass && u.google ? ' or ' : ''}${u.google ? 'Google' : ''} · member since ${fmtDate(u.created)}</p><button class="btn primary" type="submit">Save profile</button></form></div>
       <div class="card"><h3>${u.pass ? 'Change password' : 'Set a password'}</h3><form class="form" id="sPw">
       ${u.pass ? `<label>Current password${pwField('pw0', 'current-password')}</label>` : '<p class="hint">You sign in with Google. Set a password to also log in with your username.</p>'}
       <div class="grid2"><label>New password${pwField('pw1')}</label><label>Confirm new password${pwField('pw2')}</label></div>
-      <p class="hint">We'll send a 6-digit code to ${esc(u.email)} to confirm.</p><div class="row"><button class="btn dark" type="submit">Verify &amp; ${u.pass ? 'change' : 'set'} password</button></div></form></div></div>
+      <div class="row"><button class="btn dark" type="submit">${u.pass ? 'Change' : 'Set'} password</button></div></form></div></div>
     <div class="card" data-stab="notifs"><div class="card-head"><h3>Notification preferences</h3><button class="btn sm" type="button" id="npToggle" aria-live="polite"></button></div>
       <form class="form" id="sNotif"><p class="hint" style="margin:0">Choose which events appear in Notifications for ${esc(biz.name)}. Turning one off stops new notices of that kind; existing ones stay.</p>
       <div class="notif-prefs">${NOTIF_PREFS.map(([k, l, d]) => `<label class="pref"><input type="checkbox" class="switch" data-npref="${k}" ${st.notify?.[k] !== false ? 'checked' : ''}><span><b>${l}</b><span class="hint">${d}</span></span></label>`).join('')}</div>
@@ -1899,45 +2108,45 @@ const SettingsView = {
       ${owner ? `<form class="form" id="sBizPw"><div class="section-title">Change business password</div><p class="hint">Cashiers enter this password to open business mode.</p>
         <div class="grid2"><label>New business password${pwField('bp1')}</label><label>Confirm${pwField('bp2')}</label></div><button class="btn dark" type="submit">${icon('lock')}Update business password</button></form>`
         : '<div class="note">You are in business mode as a cashier. Use “Exit business mode” in the menu when you are done.</div>'}
-      <div class="row-between"><div class="section-title">Staff (${staff.length})</div>${owner ? `<button class="btn sm primary" type="button" id="addStaff">${icon('plus')}Add cashier</button>` : ''}</div>
+      <div class="section-title">Staff (${staff.length})</div>${owner ? '<p class="hint" style="margin:0">To add a cashier, have them choose <b>Create account → Cashier</b>, then join with the business username above.</p>' : ''}
       <div class="list">${staff.map(x => `<div class="list-item"><span class="avatar">${esc(x.fullname.slice(0, 1).toUpperCase())}</span><div style="flex:1"><b>${esc(x.fullname)}</b>${x.id === u.id ? ' <span class="hint">(you)</span>' : ''}<div class="meta">${esc(x.username)} · ${esc(x.email)}</div></div>
         <span class="pill ${x.role === 'owner' ? 'ok' : 'mute'}">${x.role === 'owner' ? 'Owner' : 'Cashier'}</span>${owner && x.role === 'cashier' ? `<button class="btn sm" data-edstaff="${esc(x.id)}">${icon('edit')}Edit</button><button class="btn sm danger" data-rmstaff="${esc(x.id)}" aria-label="Remove">${icon('trash')}</button>` : ''}</div>`).join('')}</div></div></div>
 </div>`;
   },
 
-  staffFormButtons({isNew}) {
-    return `<button class="btn ghost" data-close>Cancel</button><button class="btn primary" id="stSave">${isNew ? 'Verify email & add' : 'Save changes'}</button>`;
+  staffFormButtons() {
+    return `<button class="btn ghost" data-close>Cancel</button><button class="btn primary" id="stSave">Save changes</button>`;
   },
 
-  staffFormModal({isNew, x}) {
+  staffFormModal({x}) {
     return `<form class="form" id="stf" novalidate>
-      <label>Full name *<input id="stName" value="${esc(x?.fullname || '')}"></label>
-      <label>Username *<input id="stUser" value="${esc(x?.username || '')}" autocomplete="off"></label>
-      <label>Email *<input id="stEmail" type="email" value="${esc(x?.email || '')}" autocomplete="off"></label>
-      ${isNew ? `<label>Temporary password *${pwField('stPass')}</label><p class="hint">We'll send a code to the cashier's email to verify it. Share the temporary password with them; they can change it after logging in.</p>`
-        : `<label>Reset password (optional)${pwField('stPass')}</label><p class="hint">Leave blank to keep their current password. A new email address must be verified with a code.</p>`}
+      <label>Full name *<input id="stName" value="${esc(x.fullname)}"></label>
+      <label>Username *<input id="stUser" value="${esc(x.username)}" autocomplete="off"></label>
+      <p class="hint">Email: ${esc(x.email)}. Cashiers change their own email and password in Settings, or with “Forgot password?” on the login screen.</p>
       <p class="form-error" id="stErr"></p></form>`;
   }
 };
 
 </script>
 <script>/* js/controllers/AuthController.js */
-/* KitaKo — CONTROLLER · Auth: handles user actions, updates models, renders AuthView. */
+/* KitaKo — CONTROLLER · Auth: log in, sign up with an emailed code, Google, password reset — all through Supabase Auth. */
 'use strict';
 
-let googlePending = null;
+let googlePending = null;   // {name, email} while a Google account picks its role and username
 
-// {name, email} while finishing a Google sign-up
-function showAuth() {
-  $('#app').hidden = true; $('#auth').hidden = false; $('#authMain').hidden = false; $('#bizStep').hidden = true;
-  authTab('login'); $('#loginError').textContent = ''; $('#loginUser').focus();
+const appUrl = () => location.origin + location.pathname;
+
+function showAuth(msg) {
+  $('#boot').hidden = true; $('#app').hidden = true; $('#auth').hidden = false; $('#authMain').hidden = false; $('#bizStep').hidden = true;
+  authTab('login'); $('#loginError').textContent = msg || ''; $('#loginUser').focus();
 }
 
 function authTab(which) {
   $$('[data-auth-tab]').forEach(b => b.classList.toggle('active', b.dataset.authTab === which));
   $('#loginForm').hidden = which !== 'login'; $('#registerForm').hidden = which !== 'register';
   $('#googleLbl').textContent = which === 'login' ? 'Continue with Google' : 'Sign up with Google';
-  if (which === 'login') cancelGoogle();
+  $('#googleBtn').hidden = !!googlePending; $('#authOr').hidden = !!googlePending;
+  if (which === 'login' && googlePending) cancelGoogle();
 }
 
 $$('[data-auth-tab]').forEach(b => b.addEventListener('click', () => authTab(b.dataset.authTab)));
@@ -1952,151 +2161,158 @@ document.addEventListener('click', e => {
 
 document.addEventListener('input', e => e.target.classList?.remove('invalid'));
 
-$('#inboxClose').addEventListener('click', () => { $('#inbox').hidden = true; });
+/* disable a button while a request runs */
+async function busy(btn, fn) { if (btn) btn.disabled = true; try { return await fn(); } finally { if (btn) btn.disabled = false; } }
 
-function verifyEmail({email, purpose, title = 'Verify your email', intro = '', onVerified, onCancel}) {
-  sendOtp(email, purpose);
-  let done = false;
+/* Supabase emails a code (the email templates must include {{ .Token }} — see README) */
+const otpCheck = (email, type) => async code => { const {error} = await sb.auth.verifyOtp({email, token: code, type}); return error ? authMsg(error) : null; };
+const otpResend = (email, type) => async () => { const {error} = await sb.auth.resend({type, email}); return error ? authMsg(error) : null; };
+
+function verifyEmail({email, title = 'Verify your email', intro = '', verify, resend, onVerified, onCancel}) {
+  let done = false, sentAt = Date.now();
   openModal(title, AuthView.verifyEmailModal({email, intro}),
     `<button class="btn ghost" data-close>Cancel</button><button class="btn primary" id="otpGo">Verify</button>`,
-    {small: true, onClose: () => { clearInterval(timer); if (!done) { delete OTP[email + '|' + purpose]; onCancel && onCancel(); } }});
-  const tick = () => { const o = OTP[email + '|' + purpose], el = $('#otpTimer'), rb = $('#otpResend'); if (!el) return;
-    const wait = o ? Math.ceil((o.sent + OTP_COOLDOWN - Date.now()) / 1000) : 0;
-    rb.disabled = wait > 0; rb.style.opacity = wait > 0 ? .45 : 1; el.textContent = wait > 0 ? `Resend available in ${wait}s` : 'Didn’t get it?'; };
+    {small: true, onClose: () => { clearInterval(timer); if (!done && onCancel) onCancel(); }});
+  const tick = () => { const el = $('#otpTimer'), rb = $('#otpResend'); if (!el) return;
+    const wait = Math.ceil((sentAt + 60e3 - Date.now()) / 1000);
+    rb.disabled = wait > 0; rb.style.opacity = wait > 0 ? .45 : 1; el.textContent = wait > 0 ? `Resend available in ${wait}s` : 'Didn’t get it? Check spam.'; };
   const timer = setInterval(tick, 1000); tick();
-  $('#otpCode').oninput = e => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6); $('#otpErr').textContent = ''; };
-  $('#otpResend').onclick = () => { sendOtp(email, purpose); $('#otpErr').textContent = ''; $('#otpCode').value = ''; tick(); toast('A new code was sent to ' + email + '.'); };
+  $('#otpCode').oninput = e => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 8); $('#otpErr').textContent = ''; };
+  $('#otpResend').onclick = () => busy($('#otpResend'), async () => {
+    const err = await resend(); if (err) { $('#otpErr').textContent = err; return; }
+    sentAt = Date.now(); $('#otpCode').value = ''; toast('A new code was sent to ' + email + '.');
+  }).then(tick);
   $('#otpForm').onsubmit = e => { e.preventDefault(); $('#otpGo').click(); };
-  $('#otpGo').onclick = () => {
-    const err = checkOtp(email, purpose, $('#otpCode').value.trim());
-    if (err) { $('#otpErr').textContent = err; $('#otpCode').select(); return; }
-    done = true; closeModal(); $('#inbox').hidden = true; onVerified();
-  };
+  $('#otpGo').onclick = () => busy($('#otpGo'), async () => {
+    const code = $('#otpCode').value.trim();
+    if (!/^\d{6,8}$/.test(code)) { $('#otpErr').textContent = 'Enter the code from the email.'; return; }
+    const err = await verify(code);
+    if (err) { if ($('#otpErr')) { $('#otpErr').textContent = err; $('#otpCode').select(); } return; }
+    done = true; closeModal(); if (onVerified) onVerified();
+  });
 }
 
-/* ---------- sign in / sign up ---------- */
+/* ---------- after signing in: profile → business → app ---------- */
 function resetFilters() {
   Object.assign(posUI, {q: '', cat: 'all', edit: false}); Object.assign(prodUI, {q: '', cat: 'all', avail: 'all'}); Object.assign(invUI, {q: '', cat: 'all', status: 'all'});
   Object.assign(txUI, {q: '', from: '', to: '', method: 'all', type: 'all'}); Object.assign(rcUI, {q: '', sel: null}); ntUI.f = 'all'; setUI.tab = 'info';
 }
 
-function signIn(u, remember, msg) {
-  session.lock(); session.set(u.id, remember); resetFilters();
-  if (!u.bizId || !S.businesses.some(b => b.id === u.bizId)) { u.bizId = null; return showBizStep(); }
-  loadBiz(u.bizId);
-  startApp(true, msg);
+async function afterAuth(msg, fresh = true) {
+  let u;
+  try { u = await loadMe(); } catch (e) { return showAuth(authMsg(e)); }
+  if (!u) { await signOutCloud(); return showAuth('Your account has no KitaKo profile. Make sure supabase/schema.sql was run, then sign up again.'); }
+  if (!u.role || !u.username) return showCompleteProfile(u);
+  if (!u.bizId || !business()) return showBizStep();
+  if (fresh) { session.lock(); resetFilters(); }
+  try { if (BIZ !== u.bizId) await loadBiz(u.bizId); } catch (e) { return showAuth('Could not load your business: ' + authMsg(e)); }
+  startApp(fresh, msg);
+}
+
+/* ---------- log in ---------- */
+async function emailFor(login) {
+  if (login.includes('@')) return login;
+  const {data, error} = await sb.rpc('email_for_login', {p_login: login});
+  if (error) throw error;
+  return data;
 }
 
 $('#loginForm').addEventListener('submit', e => {
   e.preventDefault();
   const id = $('#loginUser').value.trim().toLowerCase(), pw = $('#loginPass').value, err = $('#loginError');
   if (!id || !pw) { err.textContent = 'Enter your username or email and password.'; return; }
-  const u = S.users.find(x => x.username.toLowerCase() === id || x.email.toLowerCase() === id);
-  if (u && !u.pass) { err.textContent = 'This account signs in with Google. Use “Continue with Google”.'; return; }
-  if (!u || u.pass !== hash(pw)) { err.textContent = 'Incorrect username/email or password.'; $('#loginPass').value = ''; return; }
-  err.textContent = ''; $('#loginPass').value = '';
-  signIn(u, $('#rememberMe').checked);
+  err.textContent = '';
+  busy($('#loginForm [type=submit]'), async () => {
+    try {
+      const email = await emailFor(id);
+      if (!email) { err.textContent = 'Incorrect username/email or password.'; $('#loginPass').value = ''; return; }
+      rememberMe($('#rememberMe').checked);
+      const {error} = await sb.auth.signInWithPassword({email, password: pw});
+      if (error && /not confirmed/i.test(error.message)) {
+        const r = await otpResend(email, 'signup')(); if (r) { err.textContent = r; return; }
+        return verifyEmail({email, intro: 'Your email isn’t verified yet.', verify: otpCheck(email, 'signup'), resend: otpResend(email, 'signup'),
+          onVerified: () => { $('#loginPass').value = ''; afterAuth(); }});
+      }
+      if (error) { err.textContent = authMsg(error); $('#loginPass').value = ''; return; }
+      $('#loginPass').value = '';
+      await afterAuth();
+    } catch (ex) { err.textContent = authMsg(ex); }
+  });
 });
 
-/* Google sign-in — real Google Identity Services popup when GOOGLE_CLIENT_ID is set (see js/config.js),
-   otherwise a simulated flow so the prototype still works when opened as a local file. */
-$('#googleBtn').addEventListener('click', () => googleReady() ? googleOAuth() : googleFlow());
+/* ---------- Google (Supabase redirects to Google and back to this page) ---------- */
+$('#googleBtn').addEventListener('click', () => busy($('#googleBtn'), async () => {
+  if (!/^https?:$/.test(location.protocol)) return toast('Google sign-in needs KitaKo opened from a web address (http/https), not as a file.', 'error');
+  rememberMe(true);
+  try { sessionStorage.setItem(GP + 'oauth', '1'); } catch {}
+  const {error} = await sb.auth.signInWithOAuth({provider: 'google', options: {redirectTo: appUrl(), queryParams: {prompt: 'select_account'}}});
+  if (error) toast(authMsg(error), 'error');
+}));
 
-const googleReady = () => !!(GOOGLE_CLIENT_ID && /^https?:$/.test(location.protocol) && window.google?.accounts?.oauth2);
-
-let gClient = null;
-
-function googleOAuth() {
-  gClient = gClient || google.accounts.oauth2.initTokenClient({
-    client_id: GOOGLE_CLIENT_ID,
-    scope: 'openid email profile',
-    callback: async r => {
-      if (r.error) return toast('Google sign-in failed: ' + (r.error_description || r.error), 'error');
-      try {
-        const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {headers: {Authorization: 'Bearer ' + r.access_token}});
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const p = await res.json();
-        google.accounts.oauth2.revoke(r.access_token, () => {});   // only needed once, to read the profile
-        if (!p.email || p.email_verified === false) return toast('Your Google account has no verified email address.', 'error');
-        googleSignedIn({name: p.name || p.email.split('@')[0], email: p.email.toLowerCase(), sub: p.sub});
-      } catch (err) { toast('Could not read your Google profile. Try again.', 'error'); }
-    },
-    error_callback: e => { if (e?.type !== 'popup_closed') toast('Google sign-in could not open. Allow pop-ups for this site and try again.', 'error'); }
-  });
-  gClient.requestAccessToken({prompt: 'select_account'});
-}
-
-/* simulated fallback (no client ID, or the page is opened as file://) */
-function googleFlow() {
-  if (GOOGLE_CLIENT_ID && !/^https?:$/.test(location.protocol)) toast('Real Google sign-in needs KitaKo served over http(s), not opened as a file. Using the simulated sign-in.');
-  const known = S.users.filter(u => u.google);
-  openModal('Sign in with Google', AuthView.googleFlowModal({known}),
-    `<button class="btn ghost" data-close>Cancel</button><button class="btn primary" id="gNext">Continue</button>`, {small: true, noFocus: !!known.length});
-  $('#modalBody').onclick = e => { const b = e.target.closest('[data-gacct]'); if (b) { closeModal(); signIn(S.users.find(u => u.id === b.dataset.gacct), true); } };
-  $('#gForm').onsubmit = e => { e.preventDefault(); $('#gNext').click(); };
-  $('#gNext').onclick = () => {
-    const name = $('#gName').value.trim(), email = $('#gEmail').value.trim().toLowerCase();
-    if (!name) { $('#gErr').textContent = 'Enter your name.'; return; }
-    if (!EMAIL_RE.test(email)) { $('#gErr').textContent = 'Enter a valid email address.'; return; }
-    closeModal(); googleSignedIn({name, email});
-  };
-}
-
-/* Google has confirmed {name, email}: sign in an existing account, or finish sign-up for a new one */
-function googleSignedIn({name, email, sub}) {
-  const existing = S.users.find(u => (sub && u.googleSub === sub) || u.email.toLowerCase() === email);
-  if (existing) {
-    if (!existing.google || (sub && !existing.googleSub)) { existing.google = true; if (sub) existing.googleSub = sub; save('users'); }
-    return signIn(existing, true);
-  }
-  authTab('register'); googlePending = {name, email, sub};
-  $('#regName').value = name; $('#regEmail').value = email; $('#regEmail').readOnly = true;
-  if (!$('#regUser').value) $('#regUser').value = email.split('@')[0].replace(/[^a-zA-Z0-9_.]/g, '').slice(0, 20);
+/* signed in, but the account still needs a role and username (Google sign-up) */
+function showCompleteProfile(u) {
+  $('#boot').hidden = true; $('#app').hidden = true; $('#auth').hidden = false; $('#authMain').hidden = false; $('#bizStep').hidden = true;
+  googlePending = {name: u.fullname, email: u.email};
+  authTab('register');
+  $('#regName').value = u.fullname; $('#regEmail').value = u.email; $('#regEmail').readOnly = true;
+  if (!$('#regUser').value) $('#regUser').value = (u.username || u.email.split('@')[0]).replace(/[^a-zA-Z0-9_.]/g, '').slice(0, 20);
+  if (u.role) $(`[name=role][value=${u.role}]`).checked = true;
   $('#pwFields').hidden = true; $('#regNext').hidden = true;
-  $('#gBanner').hidden = false;
-  $('#gBanner').innerHTML = AuthView.gBanner({email});
-  $('#gCancel').onclick = cancelGoogle;
+  $('#gBanner').hidden = false; $('#gBanner').innerHTML = AuthView.gBanner({email: u.email});
+  $('#gCancel').onclick = () => { cancelGoogle(); authTab('login'); };
   $('#regUser').focus();
 }
 
 function cancelGoogle() {
-  googlePending = null;
+  const was = googlePending; googlePending = null;
   $('#gBanner').hidden = true; $('#pwFields').hidden = false; $('#regNext').hidden = false; $('#regEmail').readOnly = false;
+  $('#googleBtn').hidden = false; $('#authOr').hidden = false;
+  if (was) { $('#registerForm').reset(); signOutCloud(); }
 }
 
-/* step 1: account details → step 2: verify email (OTP) → step 3: business */
+/* ---------- sign up: 1 account details → 2 verify email (code) → 3 business ---------- */
 $('#registerForm').addEventListener('submit', e => {
   e.preventDefault();
-  const err = $('#regError'), role = $('[name=role]:checked').value, g = googlePending;
+  const form = e.target, err = $('#regError'), role = $('[name=role]:checked').value, g = googlePending;
   const v = id => $(id).value.trim();
-  const bad = (sel, m) => { $(sel).classList.add('invalid'); $(sel).focus(); err.textContent = m; return false; };
+  const bad = (sel, m) => { $(sel).classList.add('invalid'); $(sel).focus(); err.textContent = m; };
   err.textContent = '';
   const f = {name: v('#regName'), user: v('#regUser'), email: (g ? g.email : v('#regEmail')).toLowerCase(), p1: $('#regPass').value, p2: $('#regPass2').value};
   if (!f.name) return bad('#regName', 'Full name is required.');
   if (!USER_RE.test(f.user)) return bad('#regUser', 'Username must be 3–20 letters, numbers, dots or underscores.');
-  if (S.users.some(u => u.username.toLowerCase() === f.user.toLowerCase())) return bad('#regUser', 'That username is already taken.');
   if (!EMAIL_RE.test(f.email)) return bad('#regEmail', 'Enter a valid email address.');
-  if (S.users.some(u => u.email.toLowerCase() === f.email)) return bad('#regEmail', 'An account with that email already exists.');
   if (!g) {
     if (f.p1.length < 6) return bad('#regPass', 'Password must be at least 6 characters.');
     if (f.p1 !== f.p2) return bad('#regPass2', 'Passwords do not match.');
   }
-  const create = () => {
-    if (S.users.some(u => u.username.toLowerCase() === f.user.toLowerCase() || u.email.toLowerCase() === f.email)) { err.textContent = 'That username or email was just taken. Try another.'; return; }
-    const nu = {id: uid('u'), fullname: f.name, username: f.user, email: f.email, pass: g ? null : hash(f.p1), role, bizId: null, provider: g ? 'google' : 'password', google: !!g, googleSub: g?.sub || null, verified: true, created: new Date().toISOString()};
-    S.users.push(nu); save('users');
-    e.target.reset(); cancelGoogle(); $('[name=role][value=cashier]').checked = true;
-    session.set(nu.id, false); showBizStep();
-    toast('Email verified. One more step.', 'success');
-  };
-  if (g) create();
-  else verifyEmail({email: f.email, purpose: 'sign-up', title: 'Verify your email', onVerified: create});
+  const finish = () => { form.reset(); $('[name=role][value=cashier]').checked = true; toast('Account ready. One more step.', 'success'); afterAuth(); };
+  busy($('#regSubmit'), async () => {
+    try {
+      const {data: free, error: fe} = await sb.rpc('username_available', {p_username: f.user});
+      if (fe) throw fe;
+      if (!free) return bad('#regUser', 'That username is already taken.');
+      if (g) {
+        const {error} = await sb.rpc('complete_profile', {p_fullname: f.name, p_username: f.user, p_role: role});
+        if (error) return error.code === '23505' ? bad('#regUser', 'That username is already taken.') : (err.textContent = authMsg(error));
+        cancelGoogleUi(); return finish();
+      }
+      rememberMe(true);
+      const {data, error} = await sb.auth.signUp({email: f.email, password: f.p1, options: {data: {fullname: f.name, username: f.user, role}, emailRedirectTo: appUrl()}});
+      if (error) return (err.textContent = authMsg(error));
+      if (data.user && !data.user.identities?.length) return bad('#regEmail', 'An account with that email already exists. Log in instead.');
+      if (data.session) return finish();                       // "Confirm email" is turned off in Supabase
+      verifyEmail({email: f.email, verify: otpCheck(f.email, 'signup'), resend: otpResend(f.email, 'signup'), onVerified: finish});
+    } catch (ex) { err.textContent = authMsg(ex); }
+  });
 });
+
+// leave Google mode without signing out (the profile is now complete)
+function cancelGoogleUi() { googlePending = null; $('#gBanner').hidden = true; $('#pwFields').hidden = false; $('#regNext').hidden = false; $('#regEmail').readOnly = false; $('#googleBtn').hidden = false; $('#authOr').hidden = false; }
 
 function showBizStep() {
   const u = user(); if (!u) return showAuth();
   const owner = u.role === 'owner';
-  $('#app').hidden = true; $('#auth').hidden = false; $('#authMain').hidden = true; $('#bizStep').hidden = false;
+  $('#boot').hidden = true; $('#app').hidden = true; $('#auth').hidden = false; $('#authMain').hidden = true; $('#bizStep').hidden = false;
   $('#ownerFields').hidden = !owner; $('#cashierFields').hidden = owner;
   $('#bsTitle').textContent = owner ? 'Set up your business' : 'Join your business';
   $('#bsSub').textContent = `Signed in as ${u.fullname} (${u.email}). ` + (owner ? 'Tell us about your business. You can change these later in Settings.' : 'Enter the business username your owner gave you.');
@@ -2105,78 +2321,102 @@ function showBizStep() {
   (owner ? $('#bizName') : $('#regBizUser')).focus();
 }
 
-$('#bizLogout').addEventListener('click', () => { session.clear(); showAuth(); });
+$('#bizLogout').addEventListener('click', async () => { await signOutCloud(); showAuth(); });
 
 $('#bizForm').addEventListener('submit', e => {
   e.preventDefault();
   const u = user(); if (!u) return showAuth();
-  const err = $('#bizError'), v = id => $(id).value.trim();
-  const bad = (sel, m) => { $(sel).classList.add('invalid'); $(sel).focus(); err.textContent = m; return false; };
+  const form = e.target, err = $('#bizError'), v = id => $(id).value.trim();
+  const bad = (sel, m) => { $(sel).classList.add('invalid'); $(sel).focus(); err.textContent = m; };
   err.textContent = '';
-  let biz;
   if (u.role === 'cashier') {
     const bu = v('#regBizUser').toLowerCase();
     if (!bu) return bad('#regBizUser', 'Enter your company’s business username.');
-    biz = S.businesses.find(b => b.username === bu);
-    if (!biz) return bad('#regBizUser', 'No business uses that username. Check with your owner.');
-  } else {
-    const b = {name: v('#bizName'), address: v('#bizAddr'), phone: v('#bizPhone'), email: v('#bizEmail'), tin: v('#bizTin'), username: v('#bizUser').toLowerCase(), p1: $('#bizPass').value, p2: $('#bizPass2').value};
-    if (!b.name) return bad('#bizName', 'Business name is required.');
-    if (!b.address) return bad('#bizAddr', 'Business address is required.');
-    if (b.email && !EMAIL_RE.test(b.email)) return bad('#bizEmail', 'Enter a valid business email.');
-    if (!BIZ_RE.test(b.username)) return bad('#bizUser', 'Business username: 3–30 lowercase letters, numbers or dashes.');
-    if (S.businesses.some(x => x.username === b.username)) return bad('#bizUser', 'That business username is already taken.');
-    if (b.p1.length < 6) return bad('#bizPass', 'Business password must be at least 6 characters.');
-    if (b.p1 !== b.p2) return bad('#bizPass2', 'Business passwords do not match.');
-    biz = {id: uid('biz'), username: b.username, name: b.name, pass: hash(b.p1), ownerId: u.id, created: new Date().toISOString()};
-    S.businesses.push(biz);
-    const prev = BIZ; BIZ = biz.id; seedBusiness($('#bizSample').checked, b); BIZ = prev;
+    return busy($('#bizSubmit'), async () => {
+      const {error} = await sb.rpc('join_business', {p_username: bu});
+      if (error) return /No business/i.test(error.message) ? bad('#regBizUser', 'No business uses that username. Check with your owner.') : (err.textContent = authMsg(error));
+      form.reset();
+      await afterAuth(`Welcome, ${u.fullname}! You joined ${business()?.name || 'your business'}.`);
+    });
   }
-  u.bizId = biz.id; save('users', 'businesses');
-  e.target.reset();
-  signIn(u, false, u.role === 'owner' ? `Welcome, ${u.fullname}! ${biz.name} is ready.` : `Welcome, ${u.fullname}! You joined ${biz.name}.`);
+  const b = {name: v('#bizName'), address: v('#bizAddr'), phone: v('#bizPhone'), email: v('#bizEmail'), tin: v('#bizTin'), username: v('#bizUser').toLowerCase(), p1: $('#bizPass').value, p2: $('#bizPass2').value};
+  if (!b.name) return bad('#bizName', 'Business name is required.');
+  if (!b.address) return bad('#bizAddr', 'Business address is required.');
+  if (b.email && !EMAIL_RE.test(b.email)) return bad('#bizEmail', 'Enter a valid business email.');
+  if (!BIZ_RE.test(b.username)) return bad('#bizUser', 'Business username: 3–30 lowercase letters, numbers or dashes.');
+  if (b.p1.length < 6) return bad('#bizPass', 'Business password must be at least 6 characters.');
+  if (b.p1 !== b.p2) return bad('#bizPass2', 'Business passwords do not match.');
+  busy($('#bizSubmit'), async () => {
+    try {
+      const {data: id, error} = await sb.rpc('create_business', {p_username: b.username, p_name: b.name, p_password: b.p1});
+      if (error) return error.code === '23505' ? bad('#bizUser', 'That business username is already taken.') : (err.textContent = authMsg(error));
+      const sample = $('#bizSample').checked;
+      await loadMe();
+      session.lock(); resetFilters();
+      await createBizData(id, sample, b);
+      form.reset();
+      startApp(true, `Welcome, ${u.fullname}! ${b.name} is ready.`);
+    } catch (ex) { err.textContent = authMsg(ex); }
+  });
 });
 
-/* forgot password: identify → code to the account email → new password */
+/* ---------- forgot password: identify → code to the account email → new password ---------- */
 $('#forgotBtn').addEventListener('click', () => {
   openModal('Reset password', AuthView.forgotPasswordModal(),
     `<button class="btn ghost" data-close>Cancel</button><button class="btn primary" id="fpGo">Send code</button>`, {small: true});
   $('#fpForm').onsubmit = e => { e.preventDefault(); $('#fpGo').click(); };
-  $('#fpGo').onclick = () => {
+  $('#fpGo').onclick = () => busy($('#fpGo'), async () => {
     const id = $('#fpId').value.trim().toLowerCase();
-    const u = S.users.find(x => x.username.toLowerCase() === id || x.email.toLowerCase() === id);
-    if (!u) { $('#fpErr').textContent = 'No account matches that username or email.'; return; }
-    verifyEmail({email: u.email, purpose: 'password reset', title: 'Reset password', onVerified: () => newPasswordModal(u)});
-  };
+    if (!id) { $('#fpErr').textContent = 'Enter your username or email.'; return; }
+    try {
+      const email = await emailFor(id);
+      if (!email) { $('#fpErr').textContent = 'No account uses that username.'; return; }
+      const send = async () => { const {error} = await sb.auth.resetPasswordForEmail(email, {redirectTo: appUrl()}); return error ? authMsg(error) : null; };
+      const r = await send(); if (r) { $('#fpErr').textContent = r; return; }
+      verifyEmail({email, title: 'Reset password', intro: 'If an account uses this email, we sent it a code.', verify: otpCheck(email, 'recovery'), resend: send, onVerified: () => newPasswordModal(email)});
+    } catch (ex) { $('#fpErr').textContent = authMsg(ex); }
+  });
 });
 
-function newPasswordModal(u) {
-  openModal('Choose a new password', AuthView.newPasswordModal({u}),
-    `<button class="btn primary" id="npGo">Save password</button>`, {small: true});
+function newPasswordModal(email) {
+  let done = false;
+  openModal('Choose a new password', AuthView.newPasswordModal({email}),
+    `<button class="btn primary" id="npGo">Save password</button>`, {small: true, onClose: () => { if (!done) signOutCloud(); }});
   $('#npForm').onsubmit = e => { e.preventDefault(); $('#npGo').click(); };
-  $('#npGo').onclick = () => {
+  $('#npGo').onclick = () => busy($('#npGo'), async () => {
     if ($('#np1').value.length < 6) { $('#npErr').textContent = 'Password must be at least 6 characters.'; return; }
     if ($('#np1').value !== $('#np2').value) { $('#npErr').textContent = 'Passwords do not match.'; return; }
-    u.pass = hash($('#np1').value); save('users'); closeModal(); toast('Password reset. Log in with your new password.', 'success');
-    if ($('#app').hidden) { authTab('login'); $('#loginUser').value = u.username; $('#loginPass').focus(); }
-  };
+    const {error} = await sb.auth.updateUser({password: $('#np1').value, data: {has_password: true}});
+    if (error) { $('#npErr').textContent = authMsg(error); return; }
+    done = true; closeModal(); toast('Password reset. You are signed in.', 'success');
+    afterAuth();
+  });
 }
 
-/* change password / email for the signed-in user, both confirmed by a code */
-function changePassword(u, cur, p1, p2, done) {
-  if (u.pass && hash(cur.value) !== u.pass) return fieldErr(cur, 'Current password is incorrect.');
+/* ---------- change password / email for the signed-in user ---------- */
+async function changePassword(u, cur, p1, p2, done) {
+  if (u.pass && !cur.value) return fieldErr(cur, 'Enter your current password.');
   if (p1.value.length < 6) return fieldErr(p1, 'New password must be at least 6 characters.');
   if (p1.value !== p2.value) return fieldErr(p2, 'Passwords do not match.');
-  const nh = hash(p1.value), first = !u.pass;
-  verifyEmail({email: u.email, purpose: 'password change', title: 'Confirm password change', onVerified: () => { u.pass = nh; save('users'); toast(first ? 'Password set.' : 'Password changed.', 'success'); done && done(); }});
+  if (u.pass) {
+    const {error} = await sb.auth.signInWithPassword({email: u.email, password: cur.value});
+    if (error) return fieldErr(cur, /Invalid login/i.test(error.message) ? 'Current password is incorrect.' : authMsg(error));
+  }
+  const {error} = await sb.auth.updateUser({password: p1.value, data: {has_password: true}});
+  if (error) return toast(authMsg(error), 'error');
+  const first = !u.pass; u.pass = true;
+  toast(first ? 'Password set. You can now also log in with your username.' : 'Password changed.', 'success');
+  if (done) done();
 }
 
-function changeEmail(u, newEmail, done) {
+async function changeEmail(u, newEmail, done) {
   newEmail = newEmail.trim().toLowerCase();
   if (!EMAIL_RE.test(newEmail)) return toast('Enter a valid email address.', 'error');
-  if (S.users.some(x => x !== u && x.email.toLowerCase() === newEmail)) return toast('That email is used by another account.', 'error');
-  verifyEmail({email: newEmail, purpose: 'email change', title: 'Verify your new email', intro: 'Your email changes after you enter the code sent to the new address.',
-    onVerified: () => { u.email = newEmail; save('users'); toast('Email updated to ' + newEmail + '.', 'success'); done && done(); }});
+  const {error} = await sb.auth.updateUser({email: newEmail}, {emailRedirectTo: appUrl()});
+  if (error) return toast(authMsg(error), 'error');
+  verifyEmail({email: newEmail, title: 'Verify your new email', intro: 'Your email changes after you enter the code sent to the new address.',
+    verify: otpCheck(newEmail, 'email_change'), resend: otpResend(newEmail, 'email_change'),
+    onVerified: () => { u.email = newEmail; toast('Email updated to ' + newEmail + '.', 'success'); if (done) done(); }});
 }
 
 </script>
@@ -2198,8 +2438,8 @@ const charts = {};
 function startApp(fresh, msg) {
   const u = user(); if (!u) return showAuth();
   if (!u.bizId) return showBizStep();
-  if (BIZ !== u.bizId) loadBiz(u.bizId);
-  $('#auth').hidden = true; $('#app').hidden = false;
+  if (BIZ !== u.bizId) return afterAuth(msg, fresh);
+  $('#boot').hidden = true; $('#auth').hidden = true; $('#app').hidden = false;
   buildNav(); refreshProfile(); updateBell();
   if (fresh) loginChecks(msg);
   const h = location.hash.slice(1);
@@ -2219,13 +2459,15 @@ function businessMode(target, after) {
   openModal('Business mode', AppView.businessModeModal({b}),
     `<button class="btn ghost" data-close>Cancel</button><button class="btn primary" id="bmGo">${icon('unlock')}Unlock</button>`, {small: true});
   $('#bmForm').onsubmit = e => { e.preventDefault(); $('#bmGo').click(); };
-  $('#bmGo').onclick = () => {
-    if (hash($('#bmPass').value) !== b.pass) { $('#bmErr').textContent = 'Incorrect business password.'; $('#bmPass').value = ''; $('#bmPass').focus(); return; }
+  $('#bmGo').onclick = () => busy($('#bmGo'), async () => {
+    const {data: ok, error} = await sb.rpc('check_business_password', {p_password: $('#bmPass').value});
+    if (error) { $('#bmErr').textContent = authMsg(error); return; }
+    if (!ok) { $('#bmErr').textContent = 'Incorrect business password.'; $('#bmPass').value = ''; $('#bmPass').focus(); return; }
     session.unlock(user().id);
     notify('info', 'Business mode opened', `${user().fullname} opened business mode.`);
     closeModal(); buildNav(); toast('Business mode unlocked.', 'success');
     if (after) after(); else go(target && target !== 'pos' ? target : 'dashboard');
-  };
+  });
 }
 
 function lockBusiness() { session.lock(); current = 'pos'; buildNav(); go('pos'); toast('Back to cashier mode. Business screens are locked.'); }
@@ -2301,18 +2543,34 @@ function accountModal() {
     AppView.accountModalButtons(), {noFocus: true});
   $('#amOut').onclick = () => { closeModal(); logout(); };
   $('#amEm').onsubmit = e => { e.preventDefault(); if ($('#amEmail').value.trim().toLowerCase() === u.email) return toast('That is already your email.', 'warn'); changeEmail(u, $('#amEmail').value, refreshProfile); };
-  $('#amPw').onsubmit = e => { e.preventDefault(); changePassword(u, $('#am0') || {}, $('#am1'), $('#am2')); };
+  $('#amPw').onsubmit = e => { e.preventDefault(); busy(e.submitter, () => changePassword(u, $('#am0') || {}, $('#am1'), $('#am2'))); };
 }
 
 $('#logoutBtn').addEventListener('click', logout);
 
 function logout() {
-  confirmBox('Log out of KitaKo? Items in the current cart stay saved for next time.', () => {
-    session.clear(); Object.values(charts).forEach(c => c.destroy()); current = 'pos'; $('#content').innerHTML = '';
-    try { history.replaceState(null, '', location.pathname + location.search); } catch { location.hash = ''; }
+  confirmBox('Log out of KitaKo? Items in the current cart stay saved on this device for next time.', async () => {
+    await signOutCloud(); leaveApp();
     showAuth(); toast('You have been logged out.');
   }, {title: 'Log out', ok: 'Log out'});
 }
+
+function leaveApp() {
+  Object.values(charts).forEach(c => c.destroy()); for (const k in charts) delete charts[k]; current = 'pos'; $('#content').innerHTML = '';
+  try { history.replaceState(null, '', location.pathname + location.search); } catch { location.hash = ''; }
+}
+
+/* another device changed this business's data: refresh what is on screen, unless the person is typing or a dialog is open */
+let remotePending = false;
+function refreshFromRemote() {
+  if ($('#app').hidden) return;
+  updateBell();
+  const a = document.activeElement, typing = a && a.matches('input, textarea, select') && $('#content').contains(a);
+  if (!$('#modal').hidden || !$('#confirm').hidden || typing) { remotePending = true; return; }
+  remotePending = false; refreshProfile(); rerender();
+}
+ModelEvents.on('data:remote', refreshFromRemote);
+setInterval(() => { if (remotePending) refreshFromRemote(); }, 3000);
 
 function tick() { const c = $('#clock'); if (c) c.textContent = new Date().toLocaleString('en-PH', {weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit'}); }
 
@@ -3032,7 +3290,6 @@ RENDER.config = el => {
     const off = Object.values(st.notify).filter(x => !x).length; toast(off ? `Saved. ${off} notification type${off === 1 ? ' is' : 's are'} turned off.` : 'Saved. All notifications are on.', 'success'); };
   $('#stabs').onclick = e => { const b = e.target.closest('[data-stab-btn]'); if (b) { setUI.tab = b.dataset.stabBtn; showTab(); } };
   showTab();
-  if (owner) $('#addStaff').onclick = () => staffForm();
   el.querySelectorAll('[data-edstaff]').forEach(b => b.onclick = () => staffForm(S.users.find(y => y.id === b.dataset.edstaff)));
   $('#sInfo').onsubmit = e => { e.preventDefault(); const n = $('#sName').value.trim(), a = $('#sAddr').value.trim(), em = $('#sEmail').value.trim();
     if (!n) return fieldErr($('#sName'), 'Business name is required.'); if (!a) return fieldErr($('#sAddr'), 'Address is required.');
@@ -3042,9 +3299,13 @@ RENDER.config = el => {
   if (owner) $('#sBizPw').onsubmit = e => { e.preventDefault();
     if ($('#bp1').value.length < 6) return fieldErr($('#bp1'), 'Business password must be at least 6 characters.');
     if ($('#bp1').value !== $('#bp2').value) return fieldErr($('#bp2'), 'Passwords do not match.');
-    biz.pass = hash($('#bp1').value); save('businesses'); e.target.reset(); notify('info', 'Business password changed', `${u.fullname} changed the business password.`); toast('Business password updated.', 'success'); };
+    busy(e.submitter, async () => { const {error} = await sb.rpc('set_business_password', {p_password: $('#bp1').value});
+      if (error) return toast(authMsg(error), 'error');
+      e.target.reset(); notify('info', 'Business password changed', `${u.fullname} changed the business password.`); toast('Business password updated.', 'success'); }); };
   el.querySelectorAll('[data-rmstaff]').forEach(b => b.onclick = () => { const x = S.users.find(y => y.id === b.dataset.rmstaff);
-    confirmBox(`Remove ${x.fullname} from ${biz.name}? Their cashier account will be deleted. Past sales keep their name.`, () => { S.users = S.users.filter(y => y !== x); save('users'); rerender(); toast(x.fullname + ' removed.', 'success'); }, {ok: 'Remove cashier'}); });
+    confirmBox(`Remove ${x.fullname} from ${biz.name}? They can no longer open this business. Their login stays, and past sales keep their name.`, async () => {
+      const {error} = await sb.rpc('remove_staff', {p_user: x.id}); if (error) return toast(authMsg(error), 'error');
+      S.users = S.users.filter(y => y !== x); rerender(); toast(x.fullname + ' removed.', 'success'); }, {ok: 'Remove cashier'}); });
   $('#sFin').onsubmit = e => { e.preventDefault();
     const vat = num($('#sVat').value), svc = num($('#sSvc').value), del = num($('#sDel').value), stat = num($('#sStat').value), low = num($('#sLow').value);
     if (!(vat >= 0 && vat <= 100)) return fieldErr($('#sVat'), 'VAT must be between 0 and 100.');
@@ -3055,46 +3316,40 @@ RENDER.config = el => {
     const [code, sym] = $('#sCur').value.split('|');
     Object.assign(st, {currencyCode: code, currency: sym, vatRate: vat, vatInclusive: $('#sIncl').checked, serviceCharge: svc, deliveryFee: del, statRate: stat, statVatExempt: $('#sExempt').checked, defaultDiscountId: $('#sDefD').value, lowStockDefault: low, receiptFooter: $('#sFoot').value.trim(), showVatBreakdown: $('#sVatB').checked, showCashier: $('#sCash').checked});
     save('settings'); toast('Settings saved. New orders use the updated rates.', 'success'); };
-  $('#sProf').onsubmit = e => { e.preventDefault(); const n = $('#uName').value.trim(), un = $('#uUser').value.trim(), em = $('#uEmail').value.trim();
+  $('#sProf').onsubmit = e => { e.preventDefault(); const n = $('#uName').value.trim(), un = $('#uUser').value.trim(), em = $('#uEmail').value.trim(), btn = e.submitter;
     if (!n) return fieldErr($('#uName'), 'Full name is required.');
     if (!/^[a-zA-Z0-9_.]{3,20}$/.test(un)) return fieldErr($('#uUser'), 'Username must be 3–20 letters, numbers, dots or underscores.');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) return fieldErr($('#uEmail'), 'Enter a valid email.');
-    if (S.users.some(x => x !== u && x.username.toLowerCase() === un.toLowerCase())) return fieldErr($('#uUser'), 'That username is taken.');
-    if (S.users.some(x => x !== u && x.email.toLowerCase() === em.toLowerCase())) return fieldErr($('#uEmail'), 'That email is used by another account.');
-    Object.assign(u, {fullname: n, username: un}); save('users'); refreshProfile();
-    if (em.toLowerCase() !== u.email.toLowerCase()) changeEmail(u, em, () => rerender()); else toast('Profile updated.', 'success'); };
-  $('#sPw').onsubmit = e => { e.preventDefault(); const first = !u.pass; changePassword(u, $('#pw0') || {}, $('#pw1'), $('#pw2'), () => { if (first) rerender(); else e.target.reset(); }); };
+    busy(btn, async () => {
+      if (n !== u.fullname || un !== u.username) {
+        const {error} = await sb.from('profiles').update({fullname: n, username: un}).eq('id', u.id);
+        if (error) return error.code === '23505' ? fieldErr($('#uUser'), 'That username is taken.') : toast(authMsg(error), 'error');
+        Object.assign(u, {fullname: n, username: un}); refreshProfile();
+      }
+      if (em.toLowerCase() !== u.email.toLowerCase()) await changeEmail(u, em, () => rerender()); else toast('Profile updated.', 'success');
+    }); };
+  $('#sPw').onsubmit = e => { e.preventDefault(); const first = !u.pass; busy(e.submitter, () => changePassword(u, $('#pw0') || {}, $('#pw1'), $('#pw2'), () => { if (first) rerender(); else e.target.reset(); })); };
 };
 
-/* owner: add or edit a cashier account (new accounts and email changes are verified by code) */
+/* owner: edit a cashier's name and username (cashiers manage their own email and password) */
 function staffForm(x) {
-  const isNew = !x, biz = business();
-  openModal(isNew ? 'Add cashier' : 'Edit cashier', SettingsView.staffFormModal({isNew, x}),
-    SettingsView.staffFormButtons({isNew}));
+  openModal('Edit cashier', SettingsView.staffFormModal({x}), SettingsView.staffFormButtons());
   $('#stf').onsubmit = e => { e.preventDefault(); $('#stSave').click(); };
-  $('#stSave').onclick = () => {
-    const n = $('#stName').value.trim(), un = $('#stUser').value.trim(), em = $('#stEmail').value.trim().toLowerCase(), pw = $('#stPass').value;
+  $('#stSave').onclick = () => busy($('#stSave'), async () => {
+    const n = $('#stName').value.trim(), un = $('#stUser').value.trim();
     const err = m => { $('#stErr').textContent = m; };
     if (!n) return err('Full name is required.');
     if (!USER_RE.test(un)) return err('Username must be 3–20 letters, numbers, dots or underscores.');
-    if (S.users.some(y => y !== x && y.username.toLowerCase() === un.toLowerCase())) return err('That username is taken.');
-    if (!EMAIL_RE.test(em)) return err('Enter a valid email address.');
-    if (S.users.some(y => y !== x && y.email.toLowerCase() === em)) return err('That email is used by another account.');
-    if ((isNew || pw) && pw.length < 6) return err('Password must be at least 6 characters.');
-    const apply = () => {
-      if (isNew) { S.users.push({id: uid('u'), fullname: n, username: un, email: em, pass: hash(pw), role: 'cashier', bizId: biz.id, provider: 'password', google: false, verified: true, created: new Date().toISOString()});
-        notify('info', 'Cashier added', `${n} (${un}) can now log in to ${biz.name}.`); }
-      else { Object.assign(x, {fullname: n, username: un, email: em}); if (pw) x.pass = hash(pw); }
-      save('users'); setUI.tab = 'staff'; rerender(); toast(isNew ? n + ' added as cashier.' : 'Cashier updated.', 'success');
-    };
-    if (isNew || em !== x.email.toLowerCase()) verifyEmail({email: em, purpose: 'account verification', title: 'Verify cashier email', intro: `Ask ${esc(n)} for the code sent to their email.`, onVerified: apply});
-    else { closeModal(); apply(); }
-  };
+    const {error} = await sb.from('profiles').update({fullname: n, username: un}).eq('id', x.id);
+    if (error) return err(error.code === '23505' ? 'That username is taken.' : authMsg(error));
+    Object.assign(x, {fullname: n, username: un});
+    closeModal(); setUI.tab = 'staff'; rerender(); toast('Cashier updated.', 'success');
+  });
 }
 
 </script>
 <script>/* js/app.js */
-/* KitaKo — Boot: load data, then show login or the app. */
+/* KitaKo — Boot: restore the Supabase session (or finish a Google sign-in), then show login or the app. */
 'use strict';
 
 applyCollapse(navPref.get());
@@ -3103,11 +3358,27 @@ setInterval(tick, 1000);
 
 tick();
 
-loadGlobal();
-
 fillIcons();
 
-{ const u = user(); if (u && S.businesses.some(b => b.id === u.bizId)) startApp(false); else if (u && !u.bizId) showBizStep(); else { session.clear(); showAuth(); } }
+(async () => {
+  if (!sb) {
+    showAuth(window.supabase ? 'KitaKo is not connected to Supabase yet. Put your project URL and publishable key in js/config.js.' : 'Could not load the Supabase library. Check your internet connection and reload.');
+    $$('#authMain button, #authMain input').forEach(x => { if (!x.matches('[data-auth-tab]')) x.disabled = true; });
+    return;
+  }
+  // a Google sign-in that failed comes back with the reason in the address
+  const q = new URLSearchParams(location.search + '&' + location.hash.slice(1)), oauthErr = q.get('error_description');
+  let fromGoogle = false; try { fromGoogle = sessionStorage.getItem(GP + 'oauth') === '1'; sessionStorage.removeItem(GP + 'oauth'); } catch {}
+  if (oauthErr) { try { history.replaceState(null, '', location.pathname); } catch {} }
+  const {data} = await sb.auth.getSession();
+  if (data.session) await afterAuth(null, fromGoogle);
+  else showAuth(oauthErr ? 'Google sign-in failed: ' + oauthErr : '');
+
+  // signed out elsewhere (another tab, expired session): go back to the login screen
+  sb.auth.onAuthStateChange(evt => {
+    if (evt === 'SIGNED_OUT' && AUTH && !$('#app').hidden) { cloud.stop(); BIZ = null; AUTH = null; leaveApp(); closeModal(); showAuth('You were signed out.'); }
+  });
+})();
 
 </script>
 </body>

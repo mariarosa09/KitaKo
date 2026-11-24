@@ -28,7 +28,6 @@ RENDER.config = el => {
     const off = Object.values(st.notify).filter(x => !x).length; toast(off ? `Saved. ${off} notification type${off === 1 ? ' is' : 's are'} turned off.` : 'Saved. All notifications are on.', 'success'); };
   $('#stabs').onclick = e => { const b = e.target.closest('[data-stab-btn]'); if (b) { setUI.tab = b.dataset.stabBtn; showTab(); } };
   showTab();
-  if (owner) $('#addStaff').onclick = () => staffForm();
   el.querySelectorAll('[data-edstaff]').forEach(b => b.onclick = () => staffForm(S.users.find(y => y.id === b.dataset.edstaff)));
   $('#sInfo').onsubmit = e => { e.preventDefault(); const n = $('#sName').value.trim(), a = $('#sAddr').value.trim(), em = $('#sEmail').value.trim();
     if (!n) return fieldErr($('#sName'), 'Business name is required.'); if (!a) return fieldErr($('#sAddr'), 'Address is required.');
@@ -38,9 +37,13 @@ RENDER.config = el => {
   if (owner) $('#sBizPw').onsubmit = e => { e.preventDefault();
     if ($('#bp1').value.length < 6) return fieldErr($('#bp1'), 'Business password must be at least 6 characters.');
     if ($('#bp1').value !== $('#bp2').value) return fieldErr($('#bp2'), 'Passwords do not match.');
-    biz.pass = hash($('#bp1').value); save('businesses'); e.target.reset(); notify('info', 'Business password changed', `${u.fullname} changed the business password.`); toast('Business password updated.', 'success'); };
+    busy(e.submitter, async () => { const {error} = await sb.rpc('set_business_password', {p_password: $('#bp1').value});
+      if (error) return toast(authMsg(error), 'error');
+      e.target.reset(); notify('info', 'Business password changed', `${u.fullname} changed the business password.`); toast('Business password updated.', 'success'); }); };
   el.querySelectorAll('[data-rmstaff]').forEach(b => b.onclick = () => { const x = S.users.find(y => y.id === b.dataset.rmstaff);
-    confirmBox(`Remove ${x.fullname} from ${biz.name}? Their cashier account will be deleted. Past sales keep their name.`, () => { S.users = S.users.filter(y => y !== x); save('users'); rerender(); toast(x.fullname + ' removed.', 'success'); }, {ok: 'Remove cashier'}); });
+    confirmBox(`Remove ${x.fullname} from ${biz.name}? They can no longer open this business. Their login stays, and past sales keep their name.`, async () => {
+      const {error} = await sb.rpc('remove_staff', {p_user: x.id}); if (error) return toast(authMsg(error), 'error');
+      S.users = S.users.filter(y => y !== x); rerender(); toast(x.fullname + ' removed.', 'success'); }, {ok: 'Remove cashier'}); });
   $('#sFin').onsubmit = e => { e.preventDefault();
     const vat = num($('#sVat').value), svc = num($('#sSvc').value), del = num($('#sDel').value), stat = num($('#sStat').value), low = num($('#sLow').value);
     if (!(vat >= 0 && vat <= 100)) return fieldErr($('#sVat'), 'VAT must be between 0 and 100.');
@@ -51,39 +54,33 @@ RENDER.config = el => {
     const [code, sym] = $('#sCur').value.split('|');
     Object.assign(st, {currencyCode: code, currency: sym, vatRate: vat, vatInclusive: $('#sIncl').checked, serviceCharge: svc, deliveryFee: del, statRate: stat, statVatExempt: $('#sExempt').checked, defaultDiscountId: $('#sDefD').value, lowStockDefault: low, receiptFooter: $('#sFoot').value.trim(), showVatBreakdown: $('#sVatB').checked, showCashier: $('#sCash').checked});
     save('settings'); toast('Settings saved. New orders use the updated rates.', 'success'); };
-  $('#sProf').onsubmit = e => { e.preventDefault(); const n = $('#uName').value.trim(), un = $('#uUser').value.trim(), em = $('#uEmail').value.trim();
+  $('#sProf').onsubmit = e => { e.preventDefault(); const n = $('#uName').value.trim(), un = $('#uUser').value.trim(), em = $('#uEmail').value.trim(), btn = e.submitter;
     if (!n) return fieldErr($('#uName'), 'Full name is required.');
     if (!/^[a-zA-Z0-9_.]{3,20}$/.test(un)) return fieldErr($('#uUser'), 'Username must be 3–20 letters, numbers, dots or underscores.');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) return fieldErr($('#uEmail'), 'Enter a valid email.');
-    if (S.users.some(x => x !== u && x.username.toLowerCase() === un.toLowerCase())) return fieldErr($('#uUser'), 'That username is taken.');
-    if (S.users.some(x => x !== u && x.email.toLowerCase() === em.toLowerCase())) return fieldErr($('#uEmail'), 'That email is used by another account.');
-    Object.assign(u, {fullname: n, username: un}); save('users'); refreshProfile();
-    if (em.toLowerCase() !== u.email.toLowerCase()) changeEmail(u, em, () => rerender()); else toast('Profile updated.', 'success'); };
-  $('#sPw').onsubmit = e => { e.preventDefault(); const first = !u.pass; changePassword(u, $('#pw0') || {}, $('#pw1'), $('#pw2'), () => { if (first) rerender(); else e.target.reset(); }); };
+    busy(btn, async () => {
+      if (n !== u.fullname || un !== u.username) {
+        const {error} = await sb.from('profiles').update({fullname: n, username: un}).eq('id', u.id);
+        if (error) return error.code === '23505' ? fieldErr($('#uUser'), 'That username is taken.') : toast(authMsg(error), 'error');
+        Object.assign(u, {fullname: n, username: un}); refreshProfile();
+      }
+      if (em.toLowerCase() !== u.email.toLowerCase()) await changeEmail(u, em, () => rerender()); else toast('Profile updated.', 'success');
+    }); };
+  $('#sPw').onsubmit = e => { e.preventDefault(); const first = !u.pass; busy(e.submitter, () => changePassword(u, $('#pw0') || {}, $('#pw1'), $('#pw2'), () => { if (first) rerender(); else e.target.reset(); })); };
 };
 
-/* owner: add or edit a cashier account (new accounts and email changes are verified by code) */
+/* owner: edit a cashier's name and username (cashiers manage their own email and password) */
 function staffForm(x) {
-  const isNew = !x, biz = business();
-  openModal(isNew ? 'Add cashier' : 'Edit cashier', SettingsView.staffFormModal({isNew, x}),
-    SettingsView.staffFormButtons({isNew}));
+  openModal('Edit cashier', SettingsView.staffFormModal({x}), SettingsView.staffFormButtons());
   $('#stf').onsubmit = e => { e.preventDefault(); $('#stSave').click(); };
-  $('#stSave').onclick = () => {
-    const n = $('#stName').value.trim(), un = $('#stUser').value.trim(), em = $('#stEmail').value.trim().toLowerCase(), pw = $('#stPass').value;
+  $('#stSave').onclick = () => busy($('#stSave'), async () => {
+    const n = $('#stName').value.trim(), un = $('#stUser').value.trim();
     const err = m => { $('#stErr').textContent = m; };
     if (!n) return err('Full name is required.');
     if (!USER_RE.test(un)) return err('Username must be 3–20 letters, numbers, dots or underscores.');
-    if (S.users.some(y => y !== x && y.username.toLowerCase() === un.toLowerCase())) return err('That username is taken.');
-    if (!EMAIL_RE.test(em)) return err('Enter a valid email address.');
-    if (S.users.some(y => y !== x && y.email.toLowerCase() === em)) return err('That email is used by another account.');
-    if ((isNew || pw) && pw.length < 6) return err('Password must be at least 6 characters.');
-    const apply = () => {
-      if (isNew) { S.users.push({id: uid('u'), fullname: n, username: un, email: em, pass: hash(pw), role: 'cashier', bizId: biz.id, provider: 'password', google: false, verified: true, created: new Date().toISOString()});
-        notify('info', 'Cashier added', `${n} (${un}) can now log in to ${biz.name}.`); }
-      else { Object.assign(x, {fullname: n, username: un, email: em}); if (pw) x.pass = hash(pw); }
-      save('users'); setUI.tab = 'staff'; rerender(); toast(isNew ? n + ' added as cashier.' : 'Cashier updated.', 'success');
-    };
-    if (isNew || em !== x.email.toLowerCase()) verifyEmail({email: em, purpose: 'account verification', title: 'Verify cashier email', intro: `Ask ${esc(n)} for the code sent to their email.`, onVerified: apply});
-    else { closeModal(); apply(); }
-  };
+    const {error} = await sb.from('profiles').update({fullname: n, username: un}).eq('id', x.id);
+    if (error) return err(error.code === '23505' ? 'That username is taken.' : authMsg(error));
+    Object.assign(x, {fullname: n, username: un});
+    closeModal(); setUI.tab = 'staff'; rerender(); toast('Cashier updated.', 'success');
+  });
 }

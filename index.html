@@ -12,6 +12,8 @@
 </head>
 <body>
 
+<div class="boot" id="boot" role="status"><img src="assets/img/logo.png" alt=""><span>Loading KitaKo…</span></div>
+
 <!-- ============ AUTH ============ -->
 <section id="auth" class="auth" hidden>
   <div class="auth-brand">
@@ -31,7 +33,7 @@
       <button class="tab" data-auth-tab="register" role="tab">Create account</button>
     </div>
     <button class="btn google block" id="googleBtn" type="button"><img class="g-logo" alt="" src="assets/img/google.png"><span id="googleLbl">Continue with Google</span></button>
-    <div class="divider">or</div>
+    <div class="divider" id="authOr">or</div>
 
     <form id="loginForm" class="form" novalidate>
       <label>Username or email<input id="loginUser" autocomplete="username" required></label>
@@ -58,7 +60,7 @@
         <label>Password *<span class="pw"><input id="regPass" type="password" autocomplete="new-password" required><button type="button" class="pw-toggle" aria-label="Show password" title="Show password"><span data-ico="eye"></span></button></span></label>
         <label>Confirm password *<span class="pw"><input id="regPass2" type="password" autocomplete="new-password" required><button type="button" class="pw-toggle" aria-label="Show password" title="Show password"><span data-ico="eye"></span></button></span></label>
       </div>
-      <p class="hint" id="regNext">Next, we'll email you a 6-digit code to verify your address.</p>
+      <p class="hint" id="regNext">Next, we'll email you a code to verify your address.</p>
       <p class="form-error" id="regError" role="alert"></p>
       <button class="btn primary block" type="submit" id="regSubmit">Continue</button>
     </form>
@@ -94,8 +96,6 @@
   </div>
 </section>
 
-<!-- simulated email inbox (prototype has no mail server) -->
-<div class="inbox" id="inbox" hidden role="status" aria-live="polite"><header><span>Simulated email inbox</span><span class="spacer"></span><button id="inboxClose" aria-label="Close inbox">×</button></header><div class="mail" id="inboxMail"></div></div>
 
 <!-- ============ APP ============ -->
 <div id="app" class="app" hidden>
@@ -130,7 +130,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <!-- app code: utils → models → views → controllers → boot (plain scripts, no build step needed) -->
 <script src="js/config.js"></script>
 <script src="js/utils.js"></script>

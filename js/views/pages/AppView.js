@@ -25,6 +25,6 @@ const AppView = {
     <form class="form" id="amPw" style="margin-top:16px"><div class="section-title">${u.pass ? 'Change password' : 'Set a password'}</div>
       ${u.pass ? `<label>Current password${pwField('am0', 'current-password')}</label>` : ''}
       <label>New password${pwField('am1')}</label><label>Confirm new password${pwField('am2')}</label>
-      <button class="btn dark" type="submit">Verify &amp; save password</button></form>`;
+      <button class="btn dark" type="submit">Save password</button></form>`;
   }
 };
