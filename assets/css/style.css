@@ -449,5 +449,5 @@ table.one-line td.reason{max-width:340px;overflow:hidden;text-overflow:ellipsis}
 .brand{gap:10px;padding-right:0}.brand b{font-size:15px;letter-spacing:-.01em}.brand .collapse-btn{width:30px;margin-right:-4px}
 
 /* ---------- boot ---------- */
-.boot{position:fixed;inset:0;display:grid;place-content:center;justify-items:center;gap:14px;background:var(--primary);color:#fff;font:600 15px var(--body);z-index:300}
+.boot{position:fixed;inset:0;display:grid;place-content:center;justify-items:center;gap:14px;background:#fff;color:var(--primary);font:600 15px var(--body);z-index:300}
 .boot img{width:64px;height:64px;border-radius:16px;animation:pop .6s ease-in-out infinite alternate}
