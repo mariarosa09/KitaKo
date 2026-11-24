@@ -2,12 +2,17 @@
 'use strict';
 
 const ReportView = {
+  exportModal({label, n}) {
+    return `<div class="form"><p class="hint" style="margin:0">Exports the sales report for <b>${esc(label)}</b> (${n} transaction${n === 1 ? '' : 's'}): summary, products sold, payment methods and order types.</p>
+      <label>Format<select id="rFmt"><option value="csv">CSV</option><option value="excel">Excel-compatible CSV</option><option value="xlsx">Excel workbook (.xlsx)</option><option value="pdf">PDF</option></select></label></div>`;
+  },
+
   page({R, a, b, label}) {
     return `<div class="card"><div class="rep-bar">
       <label>Report period<select id="rp"><option value="daily">Daily (today)</option><option value="weekly">Weekly (last 7 days)</option><option value="monthly">Monthly (this month)</option><option value="annually">Annually (this year)</option><option value="custom">Custom range</option></select></label>
       <label>From<input type="date" id="rFrom" value="${esc(dayKey(a))}" max="${dayKey(new Date())}"></label>
       <label>To<input type="date" id="rTo" value="${esc(dayKey(b))}" max="${dayKey(new Date())}"></label>
-      <div class="btns"><button class="btn" id="rCsv">${icon('download')}CSV</button><button class="btn dark" id="rPdf">${icon('download')}PDF report</button></div></div>
+      <div class="btns"><button class="icon-btn bordered" id="rExport" type="button" aria-label="Export sales report" title="Export">${icon('download')}</button></div></div>
       <p class="hint" style="margin-top:10px">Showing <b>${esc(label)}</b> · ${R.tx.length} transactions</p></div>
     <div class="stats c6">
       <div class="stat hero"><span>Total revenue</span><b>${money(R.revenue)}</b></div>

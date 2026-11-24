@@ -283,5 +283,5 @@ function normalize() {
   ['categories','products','txns','held','discounts','notifs','stockMoves'].forEach(k => { if (!Array.isArray(S[k])) S[k] = []; });
   S.register = S.register && Array.isArray(S.register.history) ? S.register : {current: null, history: []};
   S.meta = S.meta || {receiptCounter: 1000};
-  if (!S.categories.length) S.categories = CATS.map((n, i) => ({id: 'c' + (i + 1), name: n}));
+  if (!S.categories.length) S.categories = [{id: 'c9', name: 'Others'}];
 }

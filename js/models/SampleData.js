@@ -36,7 +36,7 @@ function seedBusiness(withSamples, info = {}) {
   S.settings = {...DEFAULT_SETTINGS, ...Object.fromEntries(Object.entries(info).filter(([k, v]) => INFO_KEYS.includes(k) && v != null))};
   S.held = []; S.notifs = []; S.stockMoves = []; S.cart = null;
   if (!withSamples) {
-    S.categories = CATS.map((n, i) => ({id: 'c' + (i + 1), name: n}));
+    S.categories = [{id: 'c9', name: 'Others'}];   // new businesses start with one category; the owner adds their own
     S.products = []; S.txns = [];
     S.discounts = [{id: 'd1', name: 'Senior Citizen', type: 'senior', value: 20, minSpend: 0, from: '', to: '', enabled: true}, {id: 'd2', name: 'PWD', type: 'pwd', value: 20, minSpend: 0, from: '', to: '', enabled: true}];
     S.register = {current: null, history: []}; S.meta = {receiptCounter: 1000, seeded: now.toISOString()};

@@ -62,15 +62,27 @@ RENDER.reports = el => {
   const summaryRows = () => [['Metric', 'Value'], ['Period', label], ['Total Revenue', R.revenue], ['Transactions', R.tx.length], ['Products Sold', R.items], ['Average Transaction Value', r2(R.avg)], ['Discounts Given', R.discounts], ['VAT Collected', R.vat], ['Net Sales (ex-VAT)', R.netSales],
     ['Cost of Goods Sold', R.gross == null ? 'n/a' : R.cogs], ['Estimated Gross Profit', R.gross == null ? 'n/a' : R.gross], ['Total Expenses', R.expCount ? R.expenses : 'n/a'], ['Estimated Net Profit', R.net == null ? 'n/a' : R.net], ['Gross Margin %', R.margin == null ? 'n/a' : r2(R.margin)]];
   const prodRows = () => [['Product', 'Category', 'Qty Sold', 'Revenue'], ...prods.map(p => [p.name, p.cat, p.qty, r2(p.rev)])];
-  $('#rCsv').onclick = () => { if (!R.tx.length) return toast('No sales in this period to export.', 'warn'); exportCSV('sales-report-' + repUI.period + '-' + dayKey(new Date()), [...summaryRows(), [], ...prodRows(), [], ['Payment Method', 'Sales'], ...pm.map(x => [x[0], r2(x[1])]), [], ['Order Type', 'Sales'], ...ot.map(x => [x[0], r2(x[1])])], true); };
-  $('#rPdf').onclick = () => {
-    if (!R.tx.length) return toast('No sales in this period to export.', 'warn');
+  const pmRows = () => [['Payment Method', 'Sales'], ...pm.map(x => [x[0], r2(x[1])])];
+  const otRows = () => [['Order Type', 'Sales'], ...ot.map(x => [x[0], r2(x[1])])];
+  const reportPDF = name => {
     const doc = newPDF({unit: 'mm', format: 'a4'}); if (!doc) return;
     let y = pdfHeader(doc, 'Sales Report', label);
     y = pdfTable(doc, y, ['Metric', 'Value'], summaryRows().slice(1).map(r => [r[0], typeof r[1] === 'number' && !/Transactions|Products Sold|Margin/.test(r[0]) ? pdfMoney(r[1]) : String(r[1])]), {columnStyles: {1: {halign: 'right'}}});
     y = pdfTable(doc, y, ['Product', 'Category', 'Qty Sold', 'Revenue'], prods.map(p => [p.name, p.cat, p.qty, pdfMoney(p.rev)]), {columnStyles: {2: {halign: 'right'}, 3: {halign: 'right'}}});
     y = pdfTable(doc, y, ['Payment Method', 'Sales'], pm.map(x => [x[0], pdfMoney(x[1])]), {columnStyles: {1: {halign: 'right'}}});
     pdfTable(doc, y, ['Order Type', 'Sales'], ot.map(x => [x[0], pdfMoney(x[1])]), {columnStyles: {1: {halign: 'right'}}});
-    saveFile('sales-report-' + repUI.period + '-' + dayKey(new Date()) + '.pdf', pdfOut(doc));
+    saveFile(name + '.pdf', pdfOut(doc));
+  };
+  $('#rExport').onclick = () => {
+    openModal('Export sales report', ReportView.exportModal({label, n: R.tx.length}),
+      `<button class="btn ghost" data-close>Cancel</button><button class="btn primary" id="rGo">${icon('download')}Export</button>`, {small: true});
+    $('#rGo').onclick = () => {
+      if (!R.tx.length) return toast('No sales in this period to export.', 'warn');
+      const fmt = $('#rFmt').value, name = 'sales-report-' + repUI.period + '-' + dayKey(new Date());
+      if (fmt === 'csv' || fmt === 'excel') exportCSV(name, [...summaryRows(), [], ...prodRows(), [], ...pmRows(), [], ...otRows()], fmt === 'excel');
+      else if (fmt === 'xlsx') exportXLSX(name, [{name: 'Summary', rows: summaryRows()}, {name: 'Products', rows: prodRows()}, {name: 'Payment Methods', rows: pmRows()}, {name: 'Order Types', rows: otRows()}]);
+      else reportPDF(name);
+      closeModal();
+    };
   };
 };
