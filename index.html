@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KitaKo</title>
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ============ AUTH ============ -->
+<section id="auth" class="auth" hidden>
+  <div class="auth-brand">
+    <div class="logo-mark big"><img src="assets/img/logo.png" alt="KitaKo logo"></div>
+    <h1>KitaKo</h1>
+    <p>A simple cashier system for small business owners — sari-sari stores, cafés, food stalls, bakeries, retail and service shops. Ring up sales, take payments, print receipts, and keep your stock and earnings in check.</p>
+    <ul class="auth-points">
+      <li>Owners run the whole business: products, stock, staff, reports and settings</li>
+      <li>Cashiers get a focused checkout screen and the cash drawer; business mode needs the business password</li>
+      <li>Cash, GCash, Maya and card payments, with digital receipts</li>
+    </ul>
+  </div>
+  <div class="auth-side">
+  <div class="auth-panel" id="authMain">
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-auth-tab="login" role="tab">Log in</button>
+      <button class="tab" data-auth-tab="register" role="tab">Create account</button>
+    </div>
+    <button class="btn google block" id="googleBtn" type="button"><img class="g-logo" alt="" src="assets/img/google.png"><span id="googleLbl">Continue with Google</span></button>
+    <div class="divider">or</div>
+
+    <form id="loginForm" class="form" novalidate>
+      <label>Username or email<input id="loginUser" autocomplete="username" required></label>
+      <label>Password<span class="pw"><input id="loginPass" type="password" autocomplete="current-password" required><button type="button" class="pw-toggle" aria-label="Show password" title="Show password"><span data-ico="eye"></span></button></span></label>
+      <div class="row-between">
+        <label class="check"><input type="checkbox" id="rememberMe"> Remember me</label>
+        <button type="button" class="link" id="forgotBtn">Forgot password?</button>
+      </div>
+      <p class="form-error" id="loginError" role="alert"></p>
+      <button class="btn primary block" type="submit">Log in</button>
+    </form>
+
+    <form id="registerForm" class="form" novalidate hidden>
+      <div class="steps" aria-label="Sign-up progress"><span class="on"><i>1</i>Account</span><b></b><span class=""><i>2</i>Verify email</span><b></b><span class=""><i>3</i>Business</span></div>
+      <div class="note" id="gBanner" hidden></div>
+      <fieldset class="roles"><legend>Sign up as</legend>
+        <label class="role-card"><input type="radio" name="role" value="cashier" checked><b>Cashier</b><span>Ring up orders at the counter for an existing business</span></label>
+        <label class="role-card"><input type="radio" name="role" value="owner"><b>Business owner</b><span>Set up your business, menu, stock, staff and reports</span></label>
+      </fieldset>
+      <label>Full name *<input id="regName" autocomplete="name" required></label>
+      <label>Username *<input id="regUser" autocomplete="username" required></label>
+      <label>Email *<input id="regEmail" type="email" autocomplete="email" required></label>
+      <div id="pwFields" class="grid2">
+        <label>Password *<span class="pw"><input id="regPass" type="password" autocomplete="new-password" required><button type="button" class="pw-toggle" aria-label="Show password" title="Show password"><span data-ico="eye"></span></button></span></label>
+        <label>Confirm password *<span class="pw"><input id="regPass2" type="password" autocomplete="new-password" required><button type="button" class="pw-toggle" aria-label="Show password" title="Show password"><span data-ico="eye"></span></button></span></label>
+      </div>
+      <p class="hint" id="regNext">Next, we'll email you a 6-digit code to verify your address.</p>
+      <p class="form-error" id="regError" role="alert"></p>
+      <button class="btn primary block" type="submit" id="regSubmit">Continue</button>
+    </form>
+  </div>
+
+  <!-- step 3: business setup (owner) or join (cashier) -->
+  <div class="auth-panel" id="bizStep" hidden>
+    <div class="steps" aria-label="Sign-up progress"><span class="done"><i>1</i>Account</span><b></b><span class="done"><i>2</i>Verify email</span><b></b><span class="on"><i>3</i>Business</span></div>
+    <div><h2 id="bsTitle" style="font-size:26px">Set up your business</h2><p class="hint" id="bsSub" style="margin-top:6px"></p></div>
+    <form id="bizForm" class="form" novalidate>
+      <div id="ownerFields" class="form">
+        <label>Business name *<input id="bizName" placeholder="e.g. Aling Nena's Burger House"></label>
+        <label>Address *<input id="bizAddr" placeholder="Street, barangay, city, province"></label>
+        <label>Contact number<input id="bizPhone" inputmode="tel" placeholder="(042) 123-4567"></label>
+        <label>Business email<input id="bizEmail" type="email"></label>
+        <label>VAT Reg. TIN<input id="bizTin" placeholder="000-000-000-000"></label>
+        <label>Business username *<input id="bizUser" placeholder="e.g. alingnena-burgers" autocomplete="off"></label>
+        <p class="hint">Your cashiers enter this to join your business. Lowercase letters, numbers and dashes.</p>
+        <label>Business password *<span class="pw"><input id="bizPass" type="password" autocomplete="new-password" required><button type="button" class="pw-toggle" aria-label="Show password" title="Show password"><span data-ico="eye"></span></button></span></label>
+        <label>Confirm business password *<span class="pw"><input id="bizPass2" type="password" autocomplete="new-password" required><button type="button" class="pw-toggle" aria-label="Show password" title="Show password"><span data-ico="eye"></span></button></span></label>
+        <p class="hint">Cashiers need this password to open business mode (dashboard, products, inventory, reports, settings).</p>
+        <label class="check"><input type="checkbox" id="bizSample"> Start with a sample menu and 90 days of sample sales</label>
+      </div>
+      <div id="cashierFields" class="form" hidden>
+        <label>Business username *<input id="regBizUser" placeholder="e.g. alingnena-burgers" autocomplete="off"></label>
+        <p class="hint">Ask the business owner for the business username.</p>
+      </div>
+      <p class="form-error" id="bizError" role="alert"></p>
+      <button class="btn primary block" type="submit" id="bizSubmit">Finish setup</button>
+      <button class="btn ghost block" type="button" id="bizLogout">Log out and finish later</button>
+    </form>
+  </div>
+  </div>
+</section>
+
+<!-- simulated email inbox (prototype has no mail server) -->
+<div class="inbox" id="inbox" hidden role="status" aria-live="polite"><header><span>Simulated email inbox</span><span class="spacer"></span><button id="inboxClose" aria-label="Close inbox">×</button></header><div class="mail" id="inboxMail"></div></div>
+
+<!-- ============ APP ============ -->
+<div id="app" class="app" hidden>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><div class="logo-mark" id="brandMark"><img src="assets/img/logo.png" alt="KitaKo"></div><div><b id="brandName">KitaKo</b><small>KitaKo</small></div><button class="collapse-btn" id="collapseBtn" type="button" aria-label="Collapse sidebar" title="Collapse sidebar"><span data-ico="panelClose"></span></button></div>
+    <span class="role-tag" id="roleTag"></span>
+    <nav id="nav"></nav>
+    <button class="nav-item logout" id="logoutBtn" title="Logout"><span class="ico" data-ico="logout"></span><span>Logout</span></button>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <main class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu"><span class="ico" data-ico="menu"></span></button>
+      <h1 id="pageTitle">Dashboard</h1>
+      <div class="top-right">
+        <time id="clock" class="clock"></time>
+        <button class="icon-btn" id="bellBtn" aria-label="Notifications"><span class="ico" data-ico="bell"></span><span class="badge" id="bellCount" hidden>0</span></button>
+        <button class="profile-chip" id="profileBtn"><span class="avatar" id="avatar">C</span><span class="profile-name" id="profileName">Cashier</span></button>
+      </div>
+    </header>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+
+<!-- modal layers -->
+<div class="modal-wrap" id="modal" hidden><div class="modal" role="dialog" aria-modal="true"><header><h2 id="modalTitle"></h2><button class="icon-btn" data-close aria-label="Close"><span class="ico" data-ico="x"></span></button></header><div class="modal-body" id="modalBody"></div><footer id="modalFoot"></footer></div></div>
+<div class="modal-wrap top" id="confirm" hidden><div class="modal small" role="alertdialog" aria-modal="true"><header><h2 id="confirmTitle">Please confirm</h2></header><div class="modal-body"><p id="confirmMsg"></p></div><footer><button class="btn ghost" id="confirmNo">Cancel</button><button class="btn primary" id="confirmYes">Confirm</button></footer></div></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div id="printArea"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- app code: utils → models → views → controllers → boot (plain scripts, no build step needed) -->
+<script src="js/utils.js"></script>
+<script src="js/models/Store.js"></script>
+<script src="js/models/SampleData.js"></script>
+<script src="js/models/AccountModel.js"></script>
+<script src="js/models/ProductModel.js"></script>
+<script src="js/models/SalesModel.js"></script>
+<script src="js/models/NotificationModel.js"></script>
+<script src="js/models/ReportModel.js"></script>
+<script src="js/models/RegisterModel.js"></script>
+<script src="js/views/components.js"></script>
+<script src="js/views/exports.js"></script>
+<script src="js/views/pages/AuthView.js"></script>
+<script src="js/views/pages/AppView.js"></script>
+<script src="js/views/pages/ReceiptView.js"></script>
+<script src="js/views/pages/DashboardView.js"></script>
+<script src="js/views/pages/TransactionView.js"></script>
+<script src="js/views/pages/PosView.js"></script>
+<script src="js/views/pages/ProductView.js"></script>
+<script src="js/views/pages/InventoryView.js"></script>
+<script src="js/views/pages/ReportView.js"></script>
+<script src="js/views/pages/DiscountView.js"></script>
+<script src="js/views/pages/RegisterView.js"></script>
+<script src="js/views/pages/NotificationView.js"></script>
+<script src="js/views/pages/SettingsView.js"></script>
+<script src="js/controllers/AuthController.js"></script>
+<script src="js/controllers/AppController.js"></script>
+<script src="js/controllers/DashboardController.js"></script>
+<script src="js/controllers/PosController.js"></script>
+<script src="js/controllers/ProductController.js"></script>
+<script src="js/controllers/InventoryController.js"></script>
+<script src="js/controllers/TransactionController.js"></script>
+<script src="js/controllers/ReceiptController.js"></script>
+<script src="js/controllers/ReportController.js"></script>
+<script src="js/controllers/DiscountController.js"></script>
+<script src="js/controllers/RegisterController.js"></script>
+<script src="js/controllers/NotificationController.js"></script>
+<script src="js/controllers/SettingsController.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
