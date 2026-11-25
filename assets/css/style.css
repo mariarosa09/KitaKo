@@ -658,3 +658,51 @@ input[type=checkbox],input[type=radio]{box-shadow:none}
 .auth-receipt{transform:rotateX(14deg) rotateY(-10deg) rotateZ(-3deg) translateY(18px);transform-origin:50% 100%;box-shadow:0 -1px 0 rgba(255,255,255,.6) inset,-18px -10px 40px -10px rgba(0,0,0,.45),0 -30px 60px -30px rgba(0,0,0,.4)}
 
 @media (prefers-reduced-motion:reduce){.btn:hover,.pcard:hover,.chip:hover,.stab:hover,.icon-btn.bordered:hover,.act-btn:hover{transform:none}}
+
+/* ---------- v9: type, full-width settings, login scene ----------
+   Plus Jakarta Sans (made in Jakarta for a Southeast Asian city identity: open, friendly shapes, clear figures, has ₱)
+   for everything; IBM Plex Mono for receipts (has ₱, reads like a printed slip). */
+:root{--head:'Plus Jakarta Sans',system-ui,sans-serif;--body:'Plus Jakarta Sans',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;--wide:100%}
+body{font-family:var(--body);letter-spacing:0}
+h1,h2,h3{letter-spacing:-.02em}
+.topbar h1{font-stretch:100%;font-weight:800;letter-spacing:-.025em}
+.money,.pcard .pprice,.stat b,.totals .grand,.due b,.kv .big,.ci-sub{font-weight:800;letter-spacing:-.02em}
+.stat b{font-stretch:100%;font-size:clamp(16px,11cqi,28px)}
+
+/* settings use the whole width; short fields sit side by side */
+.set-wrap>.card,.set-wrap>.two-col{max-width:none}
+#sInfo,#sFin{grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));column-gap:20px}
+#sInfo>:not(label:not(.check)):not(.grid2),#sFin>:not(label:not(.check)):not(.grid2){grid-column:1/-1}
+#sInfo>.grid2,#sFin>.grid2{display:contents}
+#sInfo>button,#sFin>button{justify-self:start;min-width:200px}
+
+/* login: a counter with the receipt, bills and coins */
+.auth-brand{padding-bottom:0;gap:18px;background:radial-gradient(120% 70% at 85% 100%,#14508C 0,#0A3460 55%)}
+.auth-brand h1{font-stretch:100%;font-weight:800;letter-spacing:-.035em;font-size:clamp(44px,5vw,64px)}
+.auth-brand p{font-size:18px;max-width:28em}
+.auth-scene{position:relative;margin-top:auto;height:min(52vh,430px);min-height:330px}
+.auth-scene .auth-receipt{position:absolute;left:50%;bottom:0;margin:0;width:300px;transform:translateX(-46%) rotateX(12deg) rotateZ(-2deg) translateY(16px);transform-origin:50% 100%;z-index:2;font-size:12.5px;padding:20px 20px 28px}
+.ar-cash{color:#5A6B7D;font-size:12px}
+.ar-total b{font-family:var(--head);font-weight:800}
+.ar-stamp{font-family:var(--head)}
+.bill{position:absolute;width:280px;height:128px;border-radius:8px;display:flex;align-items:flex-start;justify-content:space-between;padding:14px 18px;overflow:hidden;
+  box-shadow:inset 0 0 0 6px rgba(255,255,255,.18),inset 0 0 0 7px rgba(0,0,0,.08),0 18px 30px -12px rgba(0,0,0,.55)}
+.bill::before{content:"";position:absolute;inset:0;background:repeating-radial-gradient(circle at 78% 60%,rgba(255,255,255,.14) 0 2px,transparent 2px 9px);pointer-events:none}
+.bill b{position:relative;font:800 34px var(--head);letter-spacing:-.02em;color:rgba(255,255,255,.95)}
+.bill-seal{position:relative;font:800 26px var(--head);font-style:normal;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;color:rgba(255,255,255,.95);border:2px solid rgba(255,255,255,.55);background:rgba(255,255,255,.12)}
+.bill-band{position:absolute;left:0;right:0;bottom:22px;height:16px;background:rgba(255,255,255,.16)}
+.b1000{flex-direction:row-reverse;background:linear-gradient(135deg,#3C7FB8,#1D5A8F 60%,#2E6FA6);left:calc(50% - 300px);bottom:120px;transform:rotate(-14deg)}
+.b500{background:linear-gradient(135deg,#E9C94F,#C99A1E 60%,#DDB43A);left:calc(50% - 230px);bottom:175px;transform:rotate(-26deg)}
+.b500 b,.b500 .bill-seal{color:#4A3605;border-color:rgba(74,54,5,.45)}
+.coin{position:absolute;border-radius:50%;display:grid;place-items:center;z-index:3;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18),inset 0 2px 0 rgba(255,255,255,.55),0 8px 14px -4px rgba(0,0,0,.55)}
+.coin b{font:800 20px var(--head);letter-spacing:-.02em}
+.coin b::before{content:"₱";font-size:.62em;margin-right:1px;vertical-align:.25em}
+.c20{width:78px;height:78px;right:calc(50% - 250px);bottom:26px;background:radial-gradient(circle,#D9DDE2 0 46%,#C9A64A 47% 100%)}
+.c20 b{color:#3B3F45;font-size:22px}
+.c5{width:64px;height:64px;right:calc(50% - 300px);bottom:92px;background:radial-gradient(circle at 35% 30%,#F3DC8B,#C9A13A 70%)}
+.c5 b{color:#5A4310}
+.c1{width:56px;height:56px;left:calc(50% - 250px);bottom:22px;background:radial-gradient(circle at 35% 30%,#F4F6F8,#AAB2BC 70%)}
+.c1 b{color:#3B4450}
+@media (max-width:980px){.auth-scene{display:none}}
+#sFin>label.check{order:1;margin-top:-4px}
+#sFin>button{order:2;margin-top:6px}

@@ -99,7 +99,7 @@ function mkChart(id, cfg) {
   const cv = document.getElementById(id); if (!cv) return;
   if (!window.Chart) { cv.parentElement.innerHTML = '<div class="empty"><b>Charts unavailable</b>Chart.js could not load.</div>'; return; }
   const cs = getComputedStyle(document.body), ink = cs.color, grid = getComputedStyle(document.documentElement).getPropertyValue('--line').trim() || '#e6e6e6';
-  Chart.defaults.color = ink; Chart.defaults.font.family = 'Inter, system-ui, sans-serif'; Chart.defaults.borderColor = grid;
+  Chart.defaults.color = ink; Chart.defaults.font.family = "'Plus Jakarta Sans', system-ui, sans-serif"; Chart.defaults.borderColor = grid;
   Object.assign(Chart.defaults.elements.point, {radius: 0, hoverRadius: 5, hitRadius: 12}); Chart.defaults.elements.line.borderWidth = 2.5;
   cfg.options = Object.assign({responsive: true, maintainAspectRatio: false, plugins: {legend: {display: !!cfg.legend, position: 'bottom', labels: {boxWidth: 12}}, tooltip: {callbacks: cfg.money ? {label: c => ' ' + (c.dataset.label ? c.dataset.label + ': ' : '') + money(c.parsed.y ?? c.parsed.x ?? c.parsed)} : {}}}}, cfg.options || {});
   if (cfg.money && cfg.type !== 'doughnut' && cfg.type !== 'pie') {

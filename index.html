@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" href="assets/img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -20,14 +20,23 @@
     <div class="logo-mark big"><img src="assets/img/logo.png" alt="KitaKo logo"></div>
     <h1>KitaKo</h1>
     <p>The cashier for sari-sari stores, cafés, food stalls and small shops. Ring up sales, take cash, GCash, Maya or card, and send receipts. Owners also manage products, stock, staff and reports.</p>
-    <div class="auth-receipt" aria-hidden="true">
-      <div class="ar-head"><b>Sari-sari ni Aling Nena</b><span>OR-001042 · 7:42 AM</span></div>
-      <div class="ar-line"><span>2 × Pandesal</span><span>10.00</span></div>
-      <div class="ar-line"><span>1 × Iced coffee</span><span>65.00</span></div>
-      <div class="ar-line"><span>1 × Lumpia, 6 pcs</span><span>90.00</span></div>
-      <div class="ar-line"><span>3 × Coke Mismo</span><span>60.00</span></div>
-      <div class="ar-total"><span>Total</span><b>₱225.00</b></div>
-      <div class="ar-foot"><span>Paid with GCash</span><span class="ar-stamp">Paid</span></div>
+    <div class="auth-scene" aria-hidden="true">
+      <div class="bill b500"><i class="bill-seal">₱</i><b>500</b><span class="bill-band"></span></div>
+      <div class="bill b1000"><i class="bill-seal">₱</i><b>1000</b><span class="bill-band"></span></div>
+      <div class="auth-receipt">
+        <div class="ar-head"><b>Sari-sari ni Aling Nena</b><span>OR-001042 · 7:42 AM</span></div>
+        <div class="ar-line"><span>2 × Pandesal</span><span>10.00</span></div>
+        <div class="ar-line"><span>1 × Iced coffee</span><span>65.00</span></div>
+        <div class="ar-line"><span>1 × Lumpia, 6 pcs</span><span>90.00</span></div>
+        <div class="ar-line"><span>3 × Coke Mismo</span><span>60.00</span></div>
+        <div class="ar-total"><span>Total</span><b>₱225.00</b></div>
+        <div class="ar-line ar-cash"><span>Cash</span><span>500.00</span></div>
+        <div class="ar-line ar-cash"><span>Change</span><span>275.00</span></div>
+        <div class="ar-foot"><span>Salamat po!</span><span class="ar-stamp">Paid</span></div>
+      </div>
+      <div class="coin c20"><b>20</b></div>
+      <div class="coin c5"><b>5</b></div>
+      <div class="coin c1"><b>1</b></div>
     </div>
   </div>
   <div class="auth-side">
