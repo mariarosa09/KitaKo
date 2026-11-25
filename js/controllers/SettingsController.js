@@ -66,6 +66,7 @@ RENDER.config = el => {
       }
       if (em.toLowerCase() !== u.email.toLowerCase()) await changeEmail(u, em, () => rerender()); else toast('Profile updated.', 'success');
     }); };
+  $('#sLogout').onclick = logout;
   $('#sPw').onsubmit = e => { e.preventDefault(); const first = !u.pass; busy(e.submitter, () => changePassword(u, $('#pw0') || {}, $('#pw1'), $('#pw2'), () => { if (first) rerender(); else e.target.reset(); })); };
 };
 

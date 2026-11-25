@@ -1,0 +1,17 @@
+{
+    // Serves the KitaKo folder at http://localhost:5500 (used by "Run KitaKo" in launch.json)
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Serve KitaKo",
+            "type": "shell",
+            "command": "python -u tools/serve.py 5500",
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "kitako",
+                "pattern": {"regexp": "^__never__$"},
+                "background": {"activesBegins": true, "beginsPattern": "Serving HTTP", "endsPattern": "Serving HTTP"}
+            }
+        }
+    ]
+}

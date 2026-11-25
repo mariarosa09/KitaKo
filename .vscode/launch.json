@@ -1,0 +1,14 @@
+{
+    // F5 starts the local server ("Serve KitaKo" in tasks.json) and opens KitaKo in Chrome.
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Run KitaKo",
+            "url": "http://localhost:5500",
+            "webRoot": "${workspaceFolder}",
+            "preLaunchTask": "Serve KitaKo"
+        }
+    ]
+}

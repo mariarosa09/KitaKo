@@ -20,8 +20,10 @@ A cashier (point-of-sale) system for small business owners — sari-sari stores,
 Serve the folder and open it from a web address. Supabase sign-in, and Google in particular, need `http://` or `https://`, not a file opened from disk:
 
 ```
-python -m http.server 5500
+python tools/serve.py
 ```
+
+(or press **F5** in VS Code). This serves the folder at port 5500 without browser caching, so your edits show up on a normal reload. `python -m http.server 5500` also works, but the browser may keep showing old files until you press Ctrl+Shift+R.
 
 Then open `http://localhost:5500`. You need an internet connection: data is saved to Supabase as you work, and the libraries load from a CDN (Supabase JS, Chart.js, jsPDF + AutoTable, SheetJS, Google Fonts).
 
@@ -62,6 +64,7 @@ kitako/
 │   │                          Receipt, Report, Discount, Register, Notification, Settings
 │   └── app.js                 Boot: restore the session, show login or app
 ├── supabase/schema.sql        Database tables, security rules and functions (run once in Supabase)
+├── tools/serve.py             Local server for development (no caching)
 └── tools/build.py             Bundles everything into dist/KitaKo.html
 ```
 

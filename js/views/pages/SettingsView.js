@@ -30,10 +30,12 @@ const SettingsView = {
       <label>Email *<input id="uEmail" type="email" value="${esc(u.email)}"></label>
       <p class="hint">Changing your email sends a code to the new address.</p>
       <p class="hint">Role: ${owner ? 'Business owner' : 'Cashier'} · ${esc(biz.name)} · signs in with ${u.pass ? 'password' : ''}${u.pass && u.google ? ' or ' : ''}${u.google ? 'Google' : ''} · member since ${fmtDate(u.created)}</p><button class="btn primary" type="submit">Save profile</button></form></div>
-      <div class="card"><h3>${u.pass ? 'Change password' : 'Set a password'}</h3><form class="form" id="sPw">
+      <div class="set-col"><div class="card"><h3>${u.pass ? 'Change password' : 'Set a password'}</h3><form class="form" id="sPw">
       ${u.pass ? `<label>Current password${pwField('pw0', 'current-password')}</label>` : '<p class="hint">You sign in with Google. Set a password to also log in with your username.</p>'}
       <div class="grid2"><label>New password${pwField('pw1')}</label><label>Confirm new password${pwField('pw2')}</label></div>
-      <div class="row"><button class="btn dark" type="submit">${u.pass ? 'Change' : 'Set'} password</button></div></form></div></div>
+      <div class="row"><button class="btn dark" type="submit">${u.pass ? 'Change' : 'Set'} password</button></div></form></div>
+      <div class="card"><h3>Log out</h3><div class="row-between"><p class="hint">You're logged in as <b>${esc(u.username)}</b> on this device. Items in the current cart stay saved here for next time.</p>
+      <button class="btn danger" type="button" id="sLogout">${icon('logout')}Log out</button></div></div></div></div>
     <div class="card" data-stab="notifs"><div class="card-head"><h3>Notification preferences</h3><button class="btn sm" type="button" id="npToggle" aria-live="polite"></button></div>
       <form class="form" id="sNotif"><p class="hint" style="margin:0">Choose which events appear in Notifications for ${esc(biz.name)}. Turning one off stops new notices of that kind; existing ones stay.</p>
       <div class="notif-prefs">${NOTIF_PREFS.map(([k, l, d]) => `<label class="pref"><input type="checkbox" class="switch" data-npref="${k}" ${st.notify?.[k] !== false ? 'checked' : ''}><span><b>${l}</b><span class="hint">${d}</span></span></label>`).join('')}</div>
