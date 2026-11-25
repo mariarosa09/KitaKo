@@ -597,6 +597,79 @@ tr:hover td{background:#F8FAFC}
 .stat b{font-stretch:108%;font-size:clamp(15px,12.5cqi,26px)}
 .set-wrap>.card,.set-wrap>.two-col{max-width:860px;width:100%}
 
+/* ---------- v8: depth where it means something ----------
+   Raised = you can press it (a bottom edge that sinks when pressed). Sunken = you type into it.
+   Lifted = it floats over the page (order ticket, dialogs, toasts). Tables, charts and text stay flat. */
+:root{
+  --edge:#D3DCE6;--edge-dark:#061F3B;
+  --hi:inset 0 1px 0 rgba(255,255,255,.9);
+  --raised:var(--hi),0 2px 0 var(--edge),0 3px 6px -2px rgba(11,56,102,.14);
+  --raised-hover:var(--hi),0 3px 0 var(--edge),0 10px 18px -8px rgba(11,56,102,.25);
+  --pressed:inset 0 2px 4px rgba(11,56,102,.14);
+  --sunken:inset 0 1px 2px rgba(11,56,102,.09),inset 0 0 0 1px var(--line);
+  --lift:0 1px 2px rgba(11,56,102,.06),0 18px 40px -14px rgba(11,56,102,.32);
+}
+
+/* buttons */
+.btn,.icon-btn.bordered,.act-btn,.qty button,.chip,.stab{box-shadow:var(--raised);transition:transform .08s,box-shadow .08s,background .15s,border-color .15s}
+.btn:hover,.icon-btn.bordered:hover,.act-btn:hover,.chip:hover,.stab:hover{box-shadow:var(--raised-hover);transform:translateY(-1px)}
+.btn:active,.icon-btn.bordered:active,.act-btn:active,.qty button:active,.chip:active,.stab:active{transform:translateY(2px);box-shadow:var(--pressed)}
+.btn.primary,.btn.dark,.stab.active{background:linear-gradient(#174C83,#0B3866);border-color:#0A3460;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 3px 0 var(--edge-dark),0 6px 12px -4px rgba(6,31,59,.45)}
+.btn.primary:hover,.btn.dark:hover{background:linear-gradient(#1B5592,#0D3F73);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 4px 0 var(--edge-dark),0 12px 20px -8px rgba(6,31,59,.5)}
+.btn.primary:active,.btn.dark:active{transform:translateY(3px);box-shadow:inset 0 2px 5px rgba(0,0,0,.3)}
+.btn.accent{background:linear-gradient(#ABFBD0,#8CF5BC);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 3px 0 #4FCB8B,0 6px 12px -4px rgba(14,138,90,.35)}
+.btn.accent:active{transform:translateY(3px);box-shadow:inset 0 2px 5px rgba(14,138,90,.3)}
+.btn.ghost,.btn.ghost:hover,.btn.link{box-shadow:none;transform:none}
+.btn.danger{box-shadow:var(--hi),0 2px 0 #F2C4C4}
+.btn:disabled,.btn:disabled:hover,.btn:disabled:active{transform:none;box-shadow:none;background:var(--line2);border-color:var(--line);color:var(--muted)}
+.chip.active{background:linear-gradient(#174C83,#0B3866);box-shadow:inset 0 2px 4px rgba(0,0,0,.35);transform:translateY(1px)}
+
+/* fields and tracks are sunk into the surface */
+input,select,textarea{box-shadow:var(--sunken);border-color:transparent}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:inset 0 1px 2px rgba(11,56,102,.09),0 0 0 3px color-mix(in srgb,var(--primary) 18%,transparent)}
+input.invalid{border-color:var(--err)}
+input[type=checkbox],input[type=radio]{box-shadow:none}
+.tabs,.seg{box-shadow:inset 0 1px 3px rgba(11,56,102,.14)}
+.tab.active,.seg button.active{box-shadow:var(--hi),0 1px 0 var(--edge),0 2px 5px rgba(11,56,102,.18)}
+.switch{box-shadow:inset 0 1px 3px rgba(0,0,0,.18)}
+.switch::after{box-shadow:0 1px 1px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.22)}
+.bar-row .track{box-shadow:inset 0 1px 2px rgba(11,56,102,.12)}
+
+/* product tiles and payment methods are the main things a cashier taps */
+.pcard{box-shadow:var(--hi),0 3px 0 var(--edge),0 8px 16px -10px rgba(11,56,102,.3);transition:transform .08s,box-shadow .08s,border-color .15s}
+.pcard:hover{transform:translateY(-2px);box-shadow:var(--hi),0 5px 0 var(--edge),0 16px 26px -12px rgba(11,56,102,.35)}
+.pcard:active{transform:translateY(3px);box-shadow:inset 0 2px 6px rgba(11,56,102,.16)}
+.pcard.disabled,.pcard.disabled:hover,.pcard.editing,.pcard.editing:hover{transform:none;box-shadow:none}
+.pcard.add{box-shadow:none}
+.pcard .incart{box-shadow:0 2px 0 #4FCB8B,0 3px 6px rgba(14,138,90,.35)}
+.method{box-shadow:var(--hi),0 3px 0 var(--edge);transition:transform .08s,box-shadow .08s}
+.method:active,.method.active{transform:translateY(2px);box-shadow:inset 0 2px 5px rgba(11,56,102,.18)}
+.role-card,.pref{box-shadow:var(--hi),0 2px 0 var(--edge)}
+.role-card:has(input:checked),.pref:has(input:checked){box-shadow:inset 0 2px 4px rgba(11,56,102,.14)}
+
+/* surfaces that float above the page */
+.card,.stat{box-shadow:0 1px 0 var(--edge),0 6px 16px -12px rgba(11,56,102,.25)}
+.stat.hero{background:linear-gradient(150deg,#1A5390,#0B3866 60%);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 4px 0 var(--edge-dark),0 14px 28px -12px rgba(6,31,59,.55)}
+.ticket{box-shadow:var(--lift)}
+.due{background:linear-gradient(150deg,#1A5390,#0B3866 60%);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 3px 0 var(--edge-dark)}
+.modal{box-shadow:0 2px 4px rgba(6,24,44,.08),0 32px 80px -20px rgba(6,24,44,.55)}
+.toast{box-shadow:0 2px 4px rgba(6,24,44,.15),0 18px 40px -12px rgba(6,24,44,.5)}
+.topbar{box-shadow:0 1px 0 var(--line),0 6px 16px -14px rgba(11,56,102,.4)}
+.profile-chip{box-shadow:var(--raised)}
+.profile-chip:active{transform:translateY(2px);box-shadow:var(--pressed)}
+.logo-mark{box-shadow:inset 0 -2px 0 rgba(11,56,102,.12),0 2px 6px rgba(0,0,0,.25)}
+
+/* sidebar: the current page is a raised key */
+.nav-item.active{background:linear-gradient(rgba(255,255,255,.16),rgba(255,255,255,.08));box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 2px 0 rgba(0,0,0,.25)}
+.nav-item:active{transform:translateY(1px)}
+.nav-item .count{box-shadow:0 1px 0 #4FCB8B}
+
+/* login: the sample receipt sits in perspective */
+.auth-brand{perspective:1100px}
+.auth-receipt{transform:rotateX(14deg) rotateY(-10deg) rotateZ(-3deg) translateY(18px);transform-origin:50% 100%;box-shadow:0 -1px 0 rgba(255,255,255,.6) inset,-18px -10px 40px -10px rgba(0,0,0,.45),0 -30px 60px -30px rgba(0,0,0,.4)}
+
+@media (prefers-reduced-motion:reduce){.btn:hover,.pcard:hover,.chip:hover,.stab:hover,.icon-btn.bordered:hover,.act-btn:hover{transform:none}}
+
 </style>
 </head>
 <body>
@@ -675,7 +748,7 @@ tr:hover td{background:#F8FAFC}
         <label>Business password *<span class="pw"><input id="bizPass" type="password" autocomplete="new-password" required><button type="button" class="pw-toggle" aria-label="Show password" title="Show password"><span data-ico="eye"></span></button></span></label>
         <label>Confirm business password *<span class="pw"><input id="bizPass2" type="password" autocomplete="new-password" required><button type="button" class="pw-toggle" aria-label="Show password" title="Show password"><span data-ico="eye"></span></button></span></label>
         <p class="hint">Cashiers need this password to open business mode (dashboard, products, inventory, reports, settings).</p>
-        <label class="check"><input type="checkbox" id="bizSample"> Start with a sample menu and 90 days of sample sales</label>
+        <label class="check"><input type="checkbox" id="bizSample"> Add a starter menu with 90 days of example sales</label>
       </div>
       <div id="cashierFields" class="form" hidden>
         <label>Business username *<input id="regBizUser" placeholder="e.g. alingnena-burgers" autocomplete="off"></label>
@@ -1074,13 +1147,13 @@ function normalize() {
 
 </script>
 <script>/* js/models/SampleData.js */
-/* KitaKo — MODEL · Default settings and demo data (menu, discounts, 90 days of sales). */
+/* KitaKo — MODEL · Default settings, and the optional starter menu with 90 days of example sales. */
 'use strict';
 
 const DEFAULT_SETTINGS = {
-  name: 'KitaKo Demo Kitchen', address: 'Quezon Ave., Brgy. 5, Lucena City, Quezon', phone: '(042) 710-2481', email: 'hello@kitako.ph', tin: '000-123-456-000',
+  name: 'My business', address: '', phone: '', email: '', tin: '',
   currency: '₱', currencyCode: 'PHP', vatRate: 12, vatInclusive: true, serviceCharge: 0, deliveryFee: 49,
-  statRate: 20, statVatExempt: true, receiptFooter: 'Thank you for dining with us! Please come again.', showVatBreakdown: true, showCashier: true,
+  statRate: 20, statVatExempt: true, receiptFooter: 'Thank you! Please come again.', showVatBreakdown: true, showCashier: true,
   defaultDiscountId: '', lowStockDefault: 10,
   notify: {low: true, out: true, sale: true, inventory: true, product: true, cash: true, summary: true, info: true}
 };
@@ -1106,7 +1179,7 @@ const pickW = (rnd, pairs) => { const tot = sum(pairs, p => p[1]); let x = rnd()
 
 const INFO_KEYS = ['name','address','phone','email','tin'];
 
-/* Fills the current business (BIZ) with defaults. withSamples adds the demo menu, promos and 90 days of sales. */
+/* Fills the current business (BIZ) with defaults. withSamples adds the starter menu, promos and 90 days of example sales. */
 function seedBusiness(withSamples, info = {}) {
   const now = new Date();
   S.settings = {...DEFAULT_SETTINGS, ...Object.fromEntries(Object.entries(info).filter(([k, v]) => INFO_KEYS.includes(k) && v != null))};
@@ -1133,7 +1206,7 @@ function seedBusiness(withSamples, info = {}) {
     {id: 'd5', name: 'Staff Meal 15%', type: 'percent', value: 15, minSpend: 0, from: '', to: '', enabled: false}
   ];
   S.held = []; S.notifs = []; S.stockMoves = []; S.cart = null;
-  // sample sales history: last 90 days
+  // example sales history: last 90 days
   const rnd = mulberry32(20261124), txns = [];
   const sellable = S.products.filter(p => p.available && p.stock > 0);
   
@@ -1171,7 +1244,7 @@ function seedBusiness(withSamples, info = {}) {
     moves: [{id: 'm1', type: 'expense', amount: 350, reason: 'LPG refill', at: new Date(y.setHours(14, 10)).toISOString()}, {id: 'm2', type: 'withdraw', amount: 5000, reason: 'Mid-day bank deposit', at: new Date(y.setHours(16, 30)).toISOString()}],
     cashSales: ycash, expected: r2(3000 + ycash - 350 - 5000), actual: r2(3000 + ycash - 350 - 5000 - 20), variance: -20
   }]};
-  notify('info', 'Sample data loaded', 'Products, discounts and 90 days of sample sales were added for demonstration. Everything can be edited or deleted.', true);
+  notify('info', 'Starter menu added', 'Products, discounts and 90 days of example sales were added so you can explore the reports. Edit or delete any of them in Products, Discounts and Transaction History.', true);
   S.products.filter(p => p.stock <= p.min).forEach(p => notify(p.stock <= 0 ? 'out' : 'low', p.stock <= 0 ? 'Out of stock' : 'Low stock', `${p.name}: ${p.stock} ${p.unit} left (minimum ${p.min}).`, true));
   save();
 }
@@ -1522,7 +1595,7 @@ function receiptHTML(t) {
     ${L('Payment', esc(t.method))}${t.ref ? L('Reference', esc(t.ref)) : ''}${L('Amount received', fmtNum(t.received))}${L('Change', fmtNum(t.change))}
     ${st.showVatBreakdown ? `<hr>${L('VATable sales', fmtNum(t.vatable))}${L('VAT amount', fmtNum(t.vat))}${L('VAT-exempt sales', fmtNum(t.vatExempt))}` : ''}
     ${t.notes ? `<hr><div class="sm">Note: ${esc(t.notes)}</div>` : ''}
-    <hr><div class="c sm">${esc(st.receiptFooter)}</div><div class="c sm">This serves as your official receipt (prototype).</div>
+    <hr><div class="c sm">${esc(st.receiptFooter)}</div>
   </div>`;
 }
 

@@ -134,7 +134,7 @@ function receiptHTML(t) {
     ${L('Payment', esc(t.method))}${t.ref ? L('Reference', esc(t.ref)) : ''}${L('Amount received', fmtNum(t.received))}${L('Change', fmtNum(t.change))}
     ${st.showVatBreakdown ? `<hr>${L('VATable sales', fmtNum(t.vatable))}${L('VAT amount', fmtNum(t.vat))}${L('VAT-exempt sales', fmtNum(t.vatExempt))}` : ''}
     ${t.notes ? `<hr><div class="sm">Note: ${esc(t.notes)}</div>` : ''}
-    <hr><div class="c sm">${esc(st.receiptFooter)}</div><div class="c sm">This serves as your official receipt (prototype).</div>
+    <hr><div class="c sm">${esc(st.receiptFooter)}</div>
   </div>`;
 }
 

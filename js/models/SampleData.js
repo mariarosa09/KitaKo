@@ -1,10 +1,10 @@
-/* KitaKo — MODEL · Default settings and demo data (menu, discounts, 90 days of sales). */
+/* KitaKo — MODEL · Default settings, and the optional starter menu with 90 days of example sales. */
 'use strict';
 
 const DEFAULT_SETTINGS = {
-  name: 'KitaKo Demo Kitchen', address: 'Quezon Ave., Brgy. 5, Lucena City, Quezon', phone: '(042) 710-2481', email: 'hello@kitako.ph', tin: '000-123-456-000',
+  name: 'My business', address: '', phone: '', email: '', tin: '',
   currency: '₱', currencyCode: 'PHP', vatRate: 12, vatInclusive: true, serviceCharge: 0, deliveryFee: 49,
-  statRate: 20, statVatExempt: true, receiptFooter: 'Thank you for dining with us! Please come again.', showVatBreakdown: true, showCashier: true,
+  statRate: 20, statVatExempt: true, receiptFooter: 'Thank you! Please come again.', showVatBreakdown: true, showCashier: true,
   defaultDiscountId: '', lowStockDefault: 10,
   notify: {low: true, out: true, sale: true, inventory: true, product: true, cash: true, summary: true, info: true}
 };
@@ -30,7 +30,7 @@ const pickW = (rnd, pairs) => { const tot = sum(pairs, p => p[1]); let x = rnd()
 
 const INFO_KEYS = ['name','address','phone','email','tin'];
 
-/* Fills the current business (BIZ) with defaults. withSamples adds the demo menu, promos and 90 days of sales. */
+/* Fills the current business (BIZ) with defaults. withSamples adds the starter menu, promos and 90 days of example sales. */
 function seedBusiness(withSamples, info = {}) {
   const now = new Date();
   S.settings = {...DEFAULT_SETTINGS, ...Object.fromEntries(Object.entries(info).filter(([k, v]) => INFO_KEYS.includes(k) && v != null))};
@@ -57,7 +57,7 @@ function seedBusiness(withSamples, info = {}) {
     {id: 'd5', name: 'Staff Meal 15%', type: 'percent', value: 15, minSpend: 0, from: '', to: '', enabled: false}
   ];
   S.held = []; S.notifs = []; S.stockMoves = []; S.cart = null;
-  // sample sales history: last 90 days
+  // example sales history: last 90 days
   const rnd = mulberry32(20261124), txns = [];
   const sellable = S.products.filter(p => p.available && p.stock > 0);
   
@@ -95,7 +95,7 @@ function seedBusiness(withSamples, info = {}) {
     moves: [{id: 'm1', type: 'expense', amount: 350, reason: 'LPG refill', at: new Date(y.setHours(14, 10)).toISOString()}, {id: 'm2', type: 'withdraw', amount: 5000, reason: 'Mid-day bank deposit', at: new Date(y.setHours(16, 30)).toISOString()}],
     cashSales: ycash, expected: r2(3000 + ycash - 350 - 5000), actual: r2(3000 + ycash - 350 - 5000 - 20), variance: -20
   }]};
-  notify('info', 'Sample data loaded', 'Products, discounts and 90 days of sample sales were added for demonstration. Everything can be edited or deleted.', true);
+  notify('info', 'Starter menu added', 'Products, discounts and 90 days of example sales were added so you can explore the reports. Edit or delete any of them in Products, Discounts and Transaction History.', true);
   S.products.filter(p => p.stock <= p.min).forEach(p => notify(p.stock <= 0 ? 'out' : 'low', p.stock <= 0 ? 'Out of stock' : 'Low stock', `${p.name}: ${p.stock} ${p.unit} left (minimum ${p.min}).`, true));
   save();
 }

@@ -29,7 +29,7 @@ To get a single shareable file, run `python3 tools/build.py`. It writes `dist/Ki
 
 ### First run
 
-There are no built-in accounts. Choose **Create account**, sign up as a **Business owner** and set up your business (tick *Start with a sample menu* if you want sample data). Cashiers then sign up as **Cashier** and join using the business username shown in **Settings → Business account & staff**.
+There are no built-in accounts. Choose **Create account**, sign up as a **Business owner** and set up your business (tick *Add a starter menu* if you want example products and sales to explore). Cashiers then sign up as **Cashier** and join using the business username shown in **Settings → Business account & staff**.
 
 ## Project structure (MVC)
 
@@ -44,7 +44,7 @@ kitako/
 │   ├── utils.js               Shared helpers: $ / $$, escaping, money, dates
 │   ├── models/                MODEL — data and business rules, no screen code
 │   │   ├── Store.js           Supabase client, loading and saving business data (with merge), session, ModelEvents
-│   │   ├── SampleData.js      Default settings, sample menu, 90 days of sample sales
+│   │   ├── SampleData.js      Default settings, optional starter menu with 90 days of example sales
 │   │   ├── AccountModel.js    Users, roles, access rules, readable error messages
 │   │   ├── ProductModel.js    Products, categories, stock status, stock movement log
 │   │   ├── SalesModel.js      Pricing (12% VAT, Senior/PWD), discounts, transactions, cart
@@ -101,6 +101,6 @@ Row Level Security limits every login to its own business. Owners and cashiers c
 
 **Limits.** There is no offline mode: if the connection drops, KitaKo warns you and keeps retrying while the page stays open. Two cashiers who finish a sale in the same second can get the same receipt number. Logging in with a username looks up that username's email, so someone who knows a username can find out its email address.
 
-## Simulated features
+## Payments
 
-- **GCash / Maya / card payments** — the cashier types the reference or approval number; no payment gateway.
+GCash, Maya and card payments are recorded, not processed: the customer pays on their own app or card terminal, and the cashier types the reference or approval number into KitaKo. KitaKo does not connect to a payment gateway.
