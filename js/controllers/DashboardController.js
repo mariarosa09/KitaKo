@@ -12,7 +12,7 @@ RENDER.dashboard = el => {
   el.innerHTML = DashboardView.page({best, cashToday, items, low, maxQ, now, out, recent, sales, tToday});
   $('#qaAdd').onclick = () => productForm();
   const d14 = salesByDay(S.txns.filter(t => new Date(t.date) >= addDays(today, -13)), addDays(today, -13), 14);
-  mkChart('cDaily', {type: 'line', money: true, data: {labels: d14.map(x => x.label), datasets: [{label: 'Sales', data: d14.map(x => x.v), borderColor: '#0B3866', backgroundColor: 'rgba(11,56,102,.12)', fill: true, tension: .3, pointRadius: 3}]}});
+  mkChart('cDaily', {type: 'line', money: true, data: {labels: d14.map(x => x.label), datasets: [{label: 'Sales', data: d14.map(x => x.v), borderColor: '#0B3866', backgroundColor: 'rgba(11,56,102,.07)', fill: true, tension: .35}]}});
   const wk = weeksBack(8).map(w => ({...w, v: r2(sum(S.txns.filter(t => inRange(t, w.from, w.to)), t => t.total))}));
   mkChart('cWeekly', {type: 'bar', money: true, data: {labels: wk.map(w => w.label), datasets: [{label: 'Week of', data: wk.map(w => w.v), backgroundColor: '#0B3866', borderRadius: 6}]}});
   const mo = monthsBack(6).map(m => ({...m, v: r2(sum(S.txns.filter(t => inRange(t, m.from, m.to)), t => t.total))}));

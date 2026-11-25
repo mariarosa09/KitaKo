@@ -6,6 +6,9 @@ const PAGES = [
   ['receipts','Digital Receipts'],['reports','Sales Reports'],['discounts','Discounts and Promotions'],['register','Cash Register'],['notifications','Notifications'],['config','Settings']
 ];
 
+// sidebar sections (the label is left out for the first group)
+const NAV_GROUPS = [['', ['dashboard']], ['Selling', ['pos', 'transactions', 'receipts', 'register']], ['Catalog', ['products', 'inventory', 'discounts']], ['Insights', ['reports', 'notifications']], ['', ['config']]];
+
 const RENDER = {};
 
 let current = 'pos';

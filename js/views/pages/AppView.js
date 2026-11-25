@@ -3,7 +3,8 @@
 
 const AppView = {
   nav({open, owner}) {
-    return PAGES.filter(p => canAccess(p[0])).map(([k, l]) => `<button class="nav-item ${k === current ? 'active' : ''}" data-page="${k}" title="${l}">${icon(k)}<span>${l}</span>${k === 'notifications' ? '<span class="count" hidden></span>' : ''}</button>`).join('')
+    const item = k => { const l = PAGES.find(p => p[0] === k)[1]; return `<button class="nav-item ${k === current ? 'active' : ''}" data-page="${k}" title="${l}">${icon(k)}<span>${l}</span>${k === 'notifications' ? '<span class="count" hidden></span>' : ''}</button>`; };
+    return NAV_GROUPS.map(([g, ks]) => { const vis = ks.filter(canAccess); return vis.length ? (g ? `<div class="nav-group">${g}</div>` : '') + vis.map(item).join('') : ''; }).join('')
     + (owner ? '' : open ? `<button class="nav-item mode" id="lockBtn" title="Exit business mode">${icon('lock')}<span>Exit business mode</span></button>` : `<button class="nav-item mode" id="unlockBtn" title="Business mode">${icon('unlock')}<span>Business mode</span></button>`);
   },
 

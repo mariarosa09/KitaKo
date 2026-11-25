@@ -39,7 +39,7 @@ RENDER.reports = el => {
     tl = {labels: w.map(x => 'Wk ' + x.label), v: w.map(x => r2(sum(span.filter(t => inRange(t, x.from, x.to)), t => t.total)))}; }
   else { const m = []; for (let d = new Date(a.getFullYear(), a.getMonth(), 1); d <= b; d = new Date(d.getFullYear(), d.getMonth() + 1, 1)) m.push({from: d, to: eod(new Date(d.getFullYear(), d.getMonth() + 1, 0)), label: d.toLocaleDateString('en-PH', {month: 'short', year: 'numeric'})});
     tl = {labels: m.map(x => x.label), v: m.map(x => r2(sum(span.filter(t => inRange(t, x.from, x.to)), t => t.total)))}; }
-  mkChart('rTrend', {type: repUI.trend === 'daily' ? 'line' : 'bar', money: true, data: {labels: tl.labels, datasets: [{label: 'Sales', data: tl.v, borderColor: '#0B3866', backgroundColor: repUI.trend === 'daily' ? 'rgba(11,56,102,.12)' : '#0B3866', fill: true, tension: .3, borderRadius: 6}]}});
+  mkChart('rTrend', {type: repUI.trend === 'daily' ? 'line' : 'bar', money: true, data: {labels: tl.labels, datasets: [{label: 'Sales', data: tl.v, borderColor: '#0B3866', backgroundColor: repUI.trend === 'daily' ? 'rgba(11,56,102,.07)' : '#0B3866', fill: true, tension: .3, borderRadius: 6}]}});
   const top = prods.slice(0, 8);
   mkChart('rBest', {type: 'bar', data: {labels: top.map(p => p.name), datasets: [{label: 'Qty sold', data: top.map(p => p.qty), backgroundColor: '#0B3866', borderRadius: 5}]}, options: {indexAxis: 'y'}});
   mkChart('rLeast', {type: 'bar', data: {labels: least.map(p => p.name), datasets: [{label: 'Qty sold', data: least.map(p => p.qty), backgroundColor: '#95F9C3', borderColor: '#0B3866', borderWidth: 1.5, borderRadius: 5}]}, options: {indexAxis: 'y', scales: {x: {beginAtZero: true, ticks: {precision: 0}}}}});

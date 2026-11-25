@@ -100,11 +100,18 @@ function mkChart(id, cfg) {
   if (!window.Chart) { cv.parentElement.innerHTML = '<div class="empty"><b>Charts unavailable</b>Chart.js could not load.</div>'; return; }
   const cs = getComputedStyle(document.body), ink = cs.color, grid = getComputedStyle(document.documentElement).getPropertyValue('--line').trim() || '#e6e6e6';
   Chart.defaults.color = ink; Chart.defaults.font.family = 'Inter, system-ui, sans-serif'; Chart.defaults.borderColor = grid;
+  Object.assign(Chart.defaults.elements.point, {radius: 0, hoverRadius: 5, hitRadius: 12}); Chart.defaults.elements.line.borderWidth = 2.5;
   cfg.options = Object.assign({responsive: true, maintainAspectRatio: false, plugins: {legend: {display: !!cfg.legend, position: 'bottom', labels: {boxWidth: 12}}, tooltip: {callbacks: cfg.money ? {label: c => ' ' + (c.dataset.label ? c.dataset.label + ': ' : '') + money(c.parsed.y ?? c.parsed.x ?? c.parsed)} : {}}}}, cfg.options || {});
   if (cfg.money && cfg.type !== 'doughnut' && cfg.type !== 'pie') {
     const ax = cfg.options.indexAxis === 'y' ? 'x' : 'y';
     const other = ax === 'y' ? 'x' : 'y';
     cfg.options.scales = Object.assign({[other]: {grid: {display: false}}, [ax]: {beginAtZero: true, ticks: {callback: v => S.settings.currency + (v >= 1000 ? (v / 1000).toFixed(v % 1000 ? 1 : 0) + 'k' : v)}}}, cfg.options.scales || {});
+  }
+  // quieter axes: no axis lines, and no grid lines along the category axis
+  if (cfg.type !== 'doughnut' && cfg.type !== 'pie') {
+    const sc = cfg.options.scales = cfg.options.scales || {}, cat = cfg.options.indexAxis === 'y' ? 'y' : 'x';
+    for (const k of ['x', 'y']) { sc[k] = sc[k] || {}; sc[k].border = {display: false, ...(sc[k].border || {})}; }
+    sc[cat].grid = {display: false, ...(sc[cat].grid || {})};
   }
   charts[id] = new Chart(cv, cfg);
 }
