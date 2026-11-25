@@ -718,6 +718,9 @@ h1,h2,h3{letter-spacing:-.02em}
 #sFin>label.check{order:1;margin-top:-4px}
 #sFin>button{order:2;margin-top:6px}
 .set-col{display:grid;gap:16px;align-content:start}
+.shift-gate{max-width:460px;width:100%;margin:clamp(12px,6vh,64px) auto;display:grid;gap:18px;padding:28px}
+.shift-gate h2{font-size:22px}
+.shift-gate .lock-hero .hint{max-width:34em}
 
 </style>
 </head>
@@ -1959,6 +1962,16 @@ const TransactionView = {
 'use strict';
 
 const PosView = {
+  noShift() {
+    return `<div class="card shift-gate"><div class="lock-hero">${icon('register')}<h2>Open a shift to start selling</h2>
+      <p class="hint">Count the cash in the drawer first. Sales are recorded against the open shift, so the drawer can be balanced when the shift closes.</p></div>
+      <form class="form" id="posOpenForm">
+        <label>Opening cash in the drawer (${esc(S.settings.currency)}) *<input id="posOpenAmt" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g. 3000"></label>
+        <p class="hint">Opened by ${esc(user().fullname)} at ${fmtDT(new Date())}.</p>
+        <button class="btn primary block" type="submit">Open shift and start selling</button>
+      </form></div>`;
+  },
+
   page({c}) {
     return `<div class="pos">
     <section class="pos-left">
@@ -2836,6 +2849,12 @@ function accountModal() {
 $('#logoutBtn').addEventListener('click', logout);
 
 function logout() {
+  // the person who opened the shift has to close it (count the drawer) before leaving
+  if (myOpenShift()) {
+    if (!$('#modal').hidden) closeModal();
+    return confirmBox(`You opened a shift at ${fmtDT(S.register.current.openedAt)} that is still open. Count the drawer and close the shift on the Cash Register page, then log out.`,
+      () => go('register'), {title: 'Close your shift first', ok: 'Go to Cash Register', danger: false});
+  }
   confirmBox('Log out of KitaKo? Items in the current cart stay saved on this device for next time.', async () => {
     await signOutCloud(); leaveApp();
     showAuth(); toast('You have been logged out.');
@@ -2893,7 +2912,13 @@ RENDER.dashboard = el => {
 
 const posUI = {q: '', cat: 'all', sort: 'name', edit: false};
 
+function needShift() {
+  if (shiftOpen()) return false;
+  toast('Open a shift before selling.', 'error'); rerender(); return true;
+}
+
 function addToCart(pid, n = 1) {
+  if (needShift()) return;
   const p = product(pid); if (!p) return;
   if (!p.available) return toast(p.name + ' is marked unavailable.', 'error');
   const c = cartState(), line = c.items.find(i => i.pid === pid), have = line ? line.qty : 0;
@@ -2914,6 +2939,12 @@ function setQty(pid, q) {
 }
 
 RENDER.pos = el => {
+  if (!shiftOpen()) {   // no selling until the cash drawer has been opened for a shift
+    el.innerHTML = PosView.noShift();
+    $('#posOpenForm').onsubmit = e => { e.preventDefault(); openShift($('#posOpenAmt')); };
+    $('#posOpenAmt').focus();
+    return;
+  }
   const c = cartState();
   el.innerHTML = PosView.page({c});
   $('#posSort').value = posUI.sort;
@@ -2998,6 +3029,7 @@ function heldOrders() {
 }
 
 function openPayment() {
+  if (needShift()) return;
   const c = cartState(), lines = cartLines(); if (!lines.length) return;
   const bad = lines.find(l => !l.p.available || l.qty > l.p.stock);
   if (bad) return toast(`${bad.name}: ${!bad.p.available ? 'unavailable' : 'only ' + bad.p.stock + ' in stock'}. Adjust the cart first.`, 'error');
@@ -3033,6 +3065,7 @@ function openPayment() {
 }
 
 function completeSale(pay, t, d) {
+  if (!shiftOpen()) { closeModal(); toast('The shift was closed. Open a shift, then charge again — the cart is kept.', 'error'); return rerender(); }
   const c = cartState(), lines = cartLines();
   for (const l of lines) if (!l.p.available || l.qty > l.p.stock) return toast(`${l.name} no longer has enough stock.`, 'error');
   const received = pay.method === 'Cash' ? num(pay.received) : t.total;
@@ -3482,18 +3515,27 @@ function discountForm(d) {
 /* KitaKo — CONTROLLER · Register: handles user actions, updates models, renders RegisterView. */
 'use strict';
 
+/* open the cash drawer for a new shift (used by Cash Register and by the POS gate) */
+function openShift(amountInput) {
+  const v = num(amountInput.value);
+  if (!isFinite(v) || v < 0) return fieldErr(amountInput, 'Enter the opening cash (zero or more).');
+  if (S.register.current) { toast('A shift is already open.', 'warn'); return rerender(); }
+  S.register.current = {id: uid('shift'), openedAt: new Date().toISOString(), opening: r2(v), by: user().fullname, byId: user().id, moves: []};
+  notify('cash', 'Shift opened', `Opening cash ${money(v)} recorded by ${user().fullname}.`, true);
+  save('register', 'notifs'); updateBell(); rerender(); toast('Shift opened.', 'success');
+}
+
+const shiftOpen = () => !!S.register?.current;
+
+// the open shift was started by the signed-in user (older shifts only stored the name)
+const myOpenShift = () => { const c = S.register?.current, u = user(); return !!(c && u && (c.byId ? c.byId === u.id : c.by === u.fullname)); };
+
 RENDER.register = el => {
   const cur = S.register.current, hist = [...S.register.history].sort((a, b) => b.closedAt.localeCompare(a.closedAt));
   const histHTML = RegisterView.history({hist});
   if (!cur) {
     el.innerHTML = RegisterView.noShiftPage({histHTML});
-    $('#openForm').onsubmit = e => {
-      e.preventDefault(); const v = num($('#openAmt').value);
-      if (!isFinite(v) || v < 0) return fieldErr($('#openAmt'), 'Enter the opening cash (zero or more).');
-      S.register.current = {id: uid('shift'), openedAt: new Date().toISOString(), opening: r2(v), by: user().fullname, moves: []};
-      notify('cash', 'Shift opened', `Opening cash ${money(v)} recorded by ${user().fullname}.`, true);
-      save('register', 'notifs'); updateBell(); rerender(); toast('Shift opened.', 'success');
-    };
+    $('#openForm').onsubmit = e => { e.preventDefault(); openShift($('#openAmt')); };
   } else {
     const N = shiftNumbers(cur);
     el.innerHTML = RegisterView.openShiftPage({N, cur, histHTML});

@@ -2,6 +2,16 @@
 'use strict';
 
 const PosView = {
+  noShift() {
+    return `<div class="card shift-gate"><div class="lock-hero">${icon('register')}<h2>Open a shift to start selling</h2>
+      <p class="hint">Count the cash in the drawer first. Sales are recorded against the open shift, so the drawer can be balanced when the shift closes.</p></div>
+      <form class="form" id="posOpenForm">
+        <label>Opening cash in the drawer (${esc(S.settings.currency)}) *<input id="posOpenAmt" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g. 3000"></label>
+        <p class="hint">Opened by ${esc(user().fullname)} at ${fmtDT(new Date())}.</p>
+        <button class="btn primary block" type="submit">Open shift and start selling</button>
+      </form></div>`;
+  },
+
   page({c}) {
     return `<div class="pos">
     <section class="pos-left">

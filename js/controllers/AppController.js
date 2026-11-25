@@ -129,6 +129,12 @@ function accountModal() {
 $('#logoutBtn').addEventListener('click', logout);
 
 function logout() {
+  // the person who opened the shift has to close it (count the drawer) before leaving
+  if (myOpenShift()) {
+    if (!$('#modal').hidden) closeModal();
+    return confirmBox(`You opened a shift at ${fmtDT(S.register.current.openedAt)} that is still open. Count the drawer and close the shift on the Cash Register page, then log out.`,
+      () => go('register'), {title: 'Close your shift first', ok: 'Go to Cash Register', danger: false});
+  }
   confirmBox('Log out of KitaKo? Items in the current cart stay saved on this device for next time.', async () => {
     await signOutCloud(); leaveApp();
     showAuth(); toast('You have been logged out.');

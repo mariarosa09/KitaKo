@@ -1,18 +1,27 @@
 /* KitaKo — CONTROLLER · Register: handles user actions, updates models, renders RegisterView. */
 'use strict';
 
+/* open the cash drawer for a new shift (used by Cash Register and by the POS gate) */
+function openShift(amountInput) {
+  const v = num(amountInput.value);
+  if (!isFinite(v) || v < 0) return fieldErr(amountInput, 'Enter the opening cash (zero or more).');
+  if (S.register.current) { toast('A shift is already open.', 'warn'); return rerender(); }
+  S.register.current = {id: uid('shift'), openedAt: new Date().toISOString(), opening: r2(v), by: user().fullname, byId: user().id, moves: []};
+  notify('cash', 'Shift opened', `Opening cash ${money(v)} recorded by ${user().fullname}.`, true);
+  save('register', 'notifs'); updateBell(); rerender(); toast('Shift opened.', 'success');
+}
+
+const shiftOpen = () => !!S.register?.current;
+
+// the open shift was started by the signed-in user (older shifts only stored the name)
+const myOpenShift = () => { const c = S.register?.current, u = user(); return !!(c && u && (c.byId ? c.byId === u.id : c.by === u.fullname)); };
+
 RENDER.register = el => {
   const cur = S.register.current, hist = [...S.register.history].sort((a, b) => b.closedAt.localeCompare(a.closedAt));
   const histHTML = RegisterView.history({hist});
   if (!cur) {
     el.innerHTML = RegisterView.noShiftPage({histHTML});
-    $('#openForm').onsubmit = e => {
-      e.preventDefault(); const v = num($('#openAmt').value);
-      if (!isFinite(v) || v < 0) return fieldErr($('#openAmt'), 'Enter the opening cash (zero or more).');
-      S.register.current = {id: uid('shift'), openedAt: new Date().toISOString(), opening: r2(v), by: user().fullname, moves: []};
-      notify('cash', 'Shift opened', `Opening cash ${money(v)} recorded by ${user().fullname}.`, true);
-      save('register', 'notifs'); updateBell(); rerender(); toast('Shift opened.', 'success');
-    };
+    $('#openForm').onsubmit = e => { e.preventDefault(); openShift($('#openAmt')); };
   } else {
     const N = shiftNumbers(cur);
     el.innerHTML = RegisterView.openShiftPage({N, cur, histHTML});

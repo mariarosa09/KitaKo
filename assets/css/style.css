@@ -707,3 +707,6 @@ h1,h2,h3{letter-spacing:-.02em}
 #sFin>label.check{order:1;margin-top:-4px}
 #sFin>button{order:2;margin-top:6px}
 .set-col{display:grid;gap:16px;align-content:start}
+.shift-gate{max-width:460px;width:100%;margin:clamp(12px,6vh,64px) auto;display:grid;gap:18px;padding:28px}
+.shift-gate h2{font-size:22px}
+.shift-gate .lock-hero .hint{max-width:34em}

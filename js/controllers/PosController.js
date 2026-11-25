@@ -3,7 +3,13 @@
 
 const posUI = {q: '', cat: 'all', sort: 'name', edit: false};
 
+function needShift() {
+  if (shiftOpen()) return false;
+  toast('Open a shift before selling.', 'error'); rerender(); return true;
+}
+
 function addToCart(pid, n = 1) {
+  if (needShift()) return;
   const p = product(pid); if (!p) return;
   if (!p.available) return toast(p.name + ' is marked unavailable.', 'error');
   const c = cartState(), line = c.items.find(i => i.pid === pid), have = line ? line.qty : 0;
@@ -24,6 +30,12 @@ function setQty(pid, q) {
 }
 
 RENDER.pos = el => {
+  if (!shiftOpen()) {   // no selling until the cash drawer has been opened for a shift
+    el.innerHTML = PosView.noShift();
+    $('#posOpenForm').onsubmit = e => { e.preventDefault(); openShift($('#posOpenAmt')); };
+    $('#posOpenAmt').focus();
+    return;
+  }
   const c = cartState();
   el.innerHTML = PosView.page({c});
   $('#posSort').value = posUI.sort;
@@ -108,6 +120,7 @@ function heldOrders() {
 }
 
 function openPayment() {
+  if (needShift()) return;
   const c = cartState(), lines = cartLines(); if (!lines.length) return;
   const bad = lines.find(l => !l.p.available || l.qty > l.p.stock);
   if (bad) return toast(`${bad.name}: ${!bad.p.available ? 'unavailable' : 'only ' + bad.p.stock + ' in stock'}. Adjust the cart first.`, 'error');
@@ -143,6 +156,7 @@ function openPayment() {
 }
 
 function completeSale(pay, t, d) {
+  if (!shiftOpen()) { closeModal(); toast('The shift was closed. Open a shift, then charge again — the cart is kept.', 'error'); return rerender(); }
   const c = cartState(), lines = cartLines();
   for (const l of lines) if (!l.p.available || l.qty > l.p.stock) return toast(`${l.name} no longer has enough stock.`, 'error');
   const received = pay.method === 'Cash' ? num(pay.received) : t.total;
