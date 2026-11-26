@@ -10,6 +10,41 @@
 </p>
 
 <p align="center">
+  <img src="https://img.shields.io/badge/platform-Web%20%C2%B7%20Desktop%20%C2%B7%20Mobile-0B3866?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Platform: Web, desktop and mobile browsers">
+  <img src="https://img.shields.io/badge/JavaScript-Vanilla%20ES2020-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="Language: vanilla JavaScript">
+  <img src="https://img.shields.io/badge/backend-Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Backend: Supabase">
+  <img src="https://img.shields.io/badge/version-1.0.0-95F9C3?style=for-the-badge" alt="Version 1.0.0">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white" alt="HTML5">
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white" alt="CSS3">
+  <img src="https://img.shields.io/badge/database-PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="Database: PostgreSQL">
+  <img src="https://img.shields.io/badge/auth-Email%20%2B%20Google-4285F4?style=flat-square&logo=google&logoColor=white" alt="Auth: email and Google">
+  <img src="https://img.shields.io/badge/charts-Chart.js-FF6384?style=flat-square&logo=chartdotjs&logoColor=white" alt="Charts: Chart.js">
+  <img src="https://img.shields.io/badge/exports-PDF%20%C2%B7%20Excel%20%C2%B7%20CSV-0B3866?style=flat-square" alt="Exports: PDF, Excel and CSV">
+  <img src="https://img.shields.io/badge/build-none%20needed-lightgrey?style=flat-square" alt="No build step">
+</p>
+
+<p align="center">
+  <a href="https://kitako-lake.vercel.app"><img src="https://img.shields.io/badge/live%20demo-kitako--lake.vercel.app-000000?style=flat-square&logo=vercel&logoColor=white" alt="Live on Vercel"></a>
+  <img src="https://img.shields.io/website?url=https%3A%2F%2Fkitako-lake.vercel.app&style=flat-square&label=site" alt="Site status">
+  <img src="https://img.shields.io/github/last-commit/mariarosa09/KitaKo?style=flat-square" alt="Last commit">
+  <img src="https://img.shields.io/github/repo-size/mariarosa09/KitaKo?style=flat-square" alt="Repository size">
+  <img src="https://img.shields.io/badge/currency-PHP%20%E2%82%B1-0038A8?style=flat-square" alt="Currency: Philippine peso">
+  <img src="https://img.shields.io/badge/VAT-12%25%20%C2%B7%20Senior%2FPWD%20ready-CE1126?style=flat-square" alt="12% VAT, Senior Citizen and PWD discounts">
+</p>
+
+| | |
+|---|---|
+| **Version** | 1.0.0 |
+| **Platform** | Web app for Chrome, Edge, Firefox and Safari on desktop, tablet and phone |
+| **Frontend** | HTML, CSS and vanilla JavaScript (MVC), no framework |
+| **Backend** | Supabase: PostgreSQL with Row Level Security, Auth (email code + Google) |
+| **Hosting** | Vercel (static site) |
+| **Made for** | Small businesses in the Philippines: ₱, 12% VAT, Senior Citizen and PWD discounts, GCash and Maya |
+
+<p align="center">
   <img src="docs/screenshots/pos.png" alt="KitaKo point of sale with an order in progress" width="900">
 </p>
 
